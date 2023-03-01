@@ -1,0 +1,45 @@
+{
+  "name": "react-solidity-scaffold",
+  "version": "1.0.0",
+  "description": "Scaffold to start a web3 project with solidity, javascript and React on the frontend",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ferrodri/react-solidity-scaffold.git"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "scaffold",
+    "javascript",
+    "react",
+    "wagmi",
+    "chakra"
+  ],
+  "author": "Fernando Rodriguez Hervias",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ferrodri/react-solidity-scaffold/issues"
+  },
+  "homepage": "https://github.com/ferrodri/react-solidity-scaffold#readme",
+  "dependencies": {
+    "@chakra-ui/icons": "2.0.11",
+    "@chakra-ui/react": "2.3.6",
+    "@web3modal/ethereum": "2.0.0-rc.3",
+    "@web3modal/react": "2.0.0-rc.3",
+    "ethers": "5.7.2",
+    "formik": "2.2.9",
+    "next": "13.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "wagmi": "0.11.7",
+    "yup": "0.32.11"
+  },
+  "devDependencies": {
+    "eslint": "8.26.0",
+    "eslint-config-next": "13.0.0"
+  }
+}

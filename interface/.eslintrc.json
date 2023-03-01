@@ -1,0 +1,27 @@
+{
+    "extends": [ "next/core-web-vitals" ],
+    "rules": {
+        "no-console": "off",
+        "curly": "warn",
+        "no-unused-vars": "warn",
+        "no-dupe-else-if": "error",
+        "no-import-assign": "error",
+        "no-setter-return": "error",
+        "require-await": "error",
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}
