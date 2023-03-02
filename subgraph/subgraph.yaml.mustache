@@ -1,0 +1,27 @@
+specVersion: 0.0.3
+description: >-
+New royalty implementation
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: RoyaltyToken
+    network: {{network}}
+    source:
+      address: '{{token.address}}'
+      abi: RoyaltyToken
+      startBlock: {{token.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/royalty-erc721.ts
+      entities:
+        - Account
+        - PreviousOwner
+      abis:
+        - name: RoyaltyToken
+          file: ./abi/RoyaltyToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer

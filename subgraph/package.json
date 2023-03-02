@@ -1,0 +1,38 @@
+{
+    "name": "@royaltyloyalty/subgraph",
+    "version": "0.0.0",
+    "license": "GPL-3.0",
+    "main": "build/index.js",
+    "directories": {
+        "src": "src"
+    },
+    "scripts": {
+        "graph-node": "docker-compose up",
+        "clean": "rimraf ./src/types ./build subgraph.yaml",
+        "prepare:local": "mustache config/local.json subgraph.yaml.mustache > subgraph.yaml",
+        "prepare:hardhat": "mustache config/hardhat.json subgraph.yaml.mustache > subgraph.yaml",
+        "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
+        "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
+        "prepare:goerli": "mustache config/goerli.json subgraph.yaml.mustache > subgraph.yaml",
+        "codegen": "graph codegen --output-dir src/types/",
+        "test:configgen": "echo libsFolder: $(dirname `cd ../..; pwd`)/royaltyloyalty/node_modules > matchstick.yaml",
+        "test": "graph test",
+        "create:localnode": "graph create --node http://localhost:8020/",
+        "create-local": "graph create --node http://localhost:8020/ theroyaltyloyalty/royaltyloyalty",
+        "remove-local": "graph remove --node http://localhost:8020/ theroyaltyloyalty/royaltyloyalty",
+        "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 theroyaltyloyalty/royaltyloyalty",
+        "deploy": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
+        "deploy:localnode": "npm run clean && npm run prepare:local && npm run codegen && graph deploy theroyaltyloyalty/royaltyloyalty --debug --node http://localhost:8020/ --ipfs http://localhost:5001/",
+        "deploy:hardhat": "npm run clean && npm run prepare:hardhat && npm run codegen && npm run create:localnode theroyaltyloyalty/royaltyloyalty && npm run deploy:localnode theroyaltyloyalty/royaltyloyalty",
+        "deploy:rinkeby": "npm run clean && npm run prepare:rinkeby && npm run codegen && npm run deploy theroyaltyloyalty/royaltyloyalty",
+        "deploy:mainnet": "npm run clean && npm run prepare:mainnet && npm run codegen && npm run deploy theroyaltyloyalty/royaltyloyalty",
+        "deploy:goerli": "npm run clean && npm run prepare:goerli && npm run codegen && npm run deploy theroyaltyloyalty/royaltyloyalty",
+        "mustache": "mustache"
+    },
+    "devDependencies": {
+        "@graphprotocol/graph-cli": "^0.33.0",
+        "@graphprotocol/graph-ts": "^0.27.0",
+        "matchstick-as": "0.5.0",
+        "mustache": "^4.2.0"
+    }
+}
