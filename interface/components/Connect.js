@@ -13,7 +13,7 @@ export function Connect() {
     }
 
     return (
-        <Button onClick={onOpen} disabled={loading}>
+        <Button onClick={onOpen} disabled={loading} borderRadius='full'>
             Connect your wallet
         </Button >
     );

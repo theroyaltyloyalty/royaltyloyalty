@@ -12,14 +12,14 @@ function Home() {
     return (
         <div>
             <Head>
-                <title>Holders</title>
-                <meta name='description' content='Holders' />
+                <title>Tokens page</title>
+                <meta name='description' content='Tokens page' />
                 <link rel='icon' href='/favicon.ico' />
             </Head>
 
             <main>
                 <Container display='flex' justifyContent='space-around' marginTop='16px' minWidth='600px'>
-                    Holders page
+                    Tokens page
                 </Container>
             </main>
         </div>
