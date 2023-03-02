@@ -1,6 +1,6 @@
-# @nouns/subgraph
+# @royaltyloyalty/subgraph
 
-A subgraph that indexes nouns events.
+A subgraph that indexes royalty events.
 
 ## Quickstart
 
