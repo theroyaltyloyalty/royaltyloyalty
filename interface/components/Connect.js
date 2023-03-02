@@ -1,20 +1,23 @@
-import { useWeb3Modal } from '@web3modal/react';
-import { Button } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Web3Button } from '@web3modal/react';
+import { Container } from '@chakra-ui/react';
+import { useWeb3ModalTheme } from '@web3modal/react';
 
 export function Connect() {
-    const [loading, setLoading] = useState(false);
-    const { open } = useWeb3Modal();
+    const { theme, setTheme } = useWeb3ModalTheme();
 
-    async function onOpen() {
-        setLoading(true);
-        await open();
-        setLoading(false);
-    }
+    // Modal's theme object
+    theme;
 
+    // Set modal theme
+    setTheme({
+        themeMode: 'dark',
+        themeColor: 'orange',
+        themeBackground: 'gradient',
+    });
+    
     return (
-        <Button onClick={onOpen} disabled={loading} borderRadius='full'>
-            Connect your wallet
-        </Button >
+        <Container width='100%' textAlign='right'>
+            <Web3Button />
+        </Container>
     );
 }
