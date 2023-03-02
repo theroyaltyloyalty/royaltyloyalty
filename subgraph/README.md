@@ -5,10 +5,10 @@ A subgraph that indexes nouns events.
 ## Quickstart
 
 ```sh
-yarn
+npm run
 ```
 
-## Nouns Subgraph
+## RoyaltyLoyalty Subgraph
 
 This repo contains the templates for compiling and deploying a graphql schema to thegraph.
 
@@ -17,33 +17,33 @@ This repo contains the templates for compiling and deploying a graphql schema to
 To authenticate for thegraph deployment use the `Access Token` from thegraph dashboard:
 
 ```sh
-yarn run graph auth https://api.thegraph.com/deploy/ $ACCESS_TOKEN
+npm run run graph auth https://api.thegraph.com/deploy/ $ACCESS_TOKEN
 ```
 
 ### Create subgraph.yaml from config template
 
 ```sh
 # Official Subgraph
-yarn prepare:[network] # Supports rinkeby and mainnet
+npm run prepare:[network] # Supports mumbai and mainnet
 
 # Fork
-yarn --silent mustache config/[network]-fork.json subgraph.yaml.mustache > subgraph.yaml
+npm run --silent mustache config/[network]-fork.json subgraph.yaml.mustache > subgraph.yaml
 ```
 
 ### Generate types to use with Typescript
 
 ```sh
-yarn codegen
+npm run codegen
 ```
 
 ### Compile and deploy to thegraph (must be authenticated)
 
 ```sh
 # Official Subgraph
-yarn deploy:[network] # Supports rinkeby and mainnet
+npm run deploy:[network] # Supports mumbai and mainnet
 
 # Fork
-yarn deploy [organization]/[subgraph-name]
+npm run deploy [organization]/[subgraph-name]
 ```
 
 ## Running a local deployment
@@ -52,19 +52,19 @@ Make sure you have Docker installed.
 Run your local graph node by running:
 
 ```sh
-yarn graph-node
+npm run graph-node
 ```
 
-Make sure your local chain is running: in a new terminal go to the `nouns-contracts` package and run:
+Make sure your local chain is running: in a new terminal go to the `contracts` package and run:
 
 ```sh
-yarn task:run-local
+npm run task:run-local
 ```
 
 Then in a new terminal run:
 
 ```sh
-yarn deploy:hardhat
+npm run deploy:hardhat
 ```
 
 ## Running tests
@@ -80,7 +80,7 @@ Copy `matchstick.yaml.example` and name the copy `matchstick.yaml`. Make sure th
 From a clean pull run these commands in sequence:
 
 ```sh
-yarn prepare:rinkeby && yarn codegen
+npm run prepare:mumbai && yarn codegen
 
-yarn test
+npm run test
 ```
