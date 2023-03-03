@@ -3,9 +3,6 @@ import { Transfer } from './types/RoyaltyToken/RoyaltyToken';
 import { TransferEvent } from './types/schema';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
-export const CHECK_MATE = Address.fromString(
-    '0xfBb4F87e5dB2DcB6b5991f38f964263E5BD31463'
-);
 
 export const BIGINT_ZERO = BigInt.fromI32(0);
 export const BIGINT_ONE = BigInt.fromI32(1);
