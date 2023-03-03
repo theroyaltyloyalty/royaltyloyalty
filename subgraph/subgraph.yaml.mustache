@@ -1,6 +1,6 @@
 specVersion: 0.0.3
 description: >-
-New royalty implementation
+  New royalty implementation
 schema:
   file: ./schema.graphql
 dataSources:
@@ -17,8 +17,7 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/royalty-erc721.ts
       entities:
-        - Account
-        - PreviousOwner
+        - TransferEvent
       abis:
         - name: RoyaltyToken
           file: ./abi/RoyaltyToken.json

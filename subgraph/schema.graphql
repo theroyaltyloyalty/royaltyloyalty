@@ -2,11 +2,10 @@ type TransferEvent @entity {
   "The txn hash of this event"
   id: ID!
 
-  "Previous holder address"
-  previousHolder: Account!
+  previousHolder: String!
 
   "New holder address"
-  newHolder: Account!
+  newHolder: String!
 
   "Block number of the event"
   blockNumber: BigInt!
