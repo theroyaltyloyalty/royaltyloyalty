@@ -54,7 +54,7 @@ abstract contract RoyaltyReceiver is IRoyaltyReceiver, ERC2981 {
             _royaltyAccrued[royaltyReceiver] += msg.value;
         }
 
-        emit RoyaltyStatus(
+        emit RoyaltyPayment(
             msg.sender,
             royaltyPayer,
             royaltyAmount,
