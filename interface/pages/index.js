@@ -7,8 +7,8 @@ import {
     Container, Heading, Table, Tbody, TableContainer, Text, Td, Thead,
     Th, Tr, Button, Menu, MenuButton, MenuList, MenuItem
 } from '@chakra-ui/react';
-import { formatWallet } from '../utils';
-import { dateFilter } from '../constants';
+import { formatWallet } from '../shared/utils';
+import { dateFilter } from '../shared/constants';
 import { BsChevronDown } from 'react-icons/bs';
 
 function Home() {
