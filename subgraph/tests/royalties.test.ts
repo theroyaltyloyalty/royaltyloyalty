@@ -3,10 +3,10 @@ import {
     test,
     clearStore,
     beforeEach,
-    afterEach,
+    afterEach
 } from 'matchstick-as/assembly/index';
 import { BigInt, Address } from '@graphprotocol/graph-ts';
-import { handleTransfer } from '../src/royalties-erc721';
+import { handleTransfer } from '../src/royalty-erc721';
 import { createTransferEvent } from './royalties_utils';
 
 describe('Scoped / Nested block', () => {

@@ -1,6 +1,6 @@
 import { newMockEvent } from 'matchstick-as';
 import { ethereum, BigInt, Address } from '@graphprotocol/graph-ts';
-import { Transfer } from '../src/types/MockToken/MockToken';
+import { Transfer } from '../src/types/RoyaltyToken/RoyaltyToken';
 
 export function createTransferEvent(
     from: Address,
@@ -14,7 +14,7 @@ export function createTransferEvent(
         new ethereum.EventParam(
             'tokenId',
             ethereum.Value.fromUnsignedBigInt(id)
-        ),
+        )
     ];
 
     // const a = depositEvent.parameters[0].value.toAddress().toHexString();
