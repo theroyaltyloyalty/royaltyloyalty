@@ -15,7 +15,6 @@ interface IExchangeLike {
         address nft,
         uint256 id,
         address receiver,
-        Payment[] calldata additionalPayments,
         bool respect
     ) external payable;
 }

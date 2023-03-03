@@ -28,10 +28,9 @@ contract Router is IExchangeLike {
         address nft,
         uint256 id,
         address receiver,
-        Payment[] calldata additionalPayments,
         bool respect
     ) external payable {
-        Exchange(exchange).buy(nft, id, receiver, additionalPayments);
+        Exchange(exchange).buy(nft, id, receiver);
 
         address currency = ISimpleReceiver(nft).royaltyCurrencyInfo(id);
         if (IERC165(nft).supportsInterface(type(ISimpleReceiver).interfaceId)) {

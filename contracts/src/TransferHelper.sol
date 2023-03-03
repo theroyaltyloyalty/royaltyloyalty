@@ -1,48 +1,16 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "./Exchange.sol";
-import "./TransferConstants.sol";
-import "./Structs.sol";
-import "./Errors.sol";
+import './Exchange.sol';
+import './TransferConstants.sol';
+import './Structs.sol';
+import './Errors.sol';
 
 contract TransferHelper {
-    function _transferEthAndFinalize(
-        uint256 amount,
-        address payable to,
-        Payment[] calldata additionalRecipients
-    ) internal {
-        // Put ether value supplied by the caller on the stack.
+    function _transferEthAndFinalize(uint256 amount, address payable to)
+        internal
+    {
         uint256 etherRemaining = msg.value;
-
-        // Retrieve total number of additional recipients and place on stack.
-        uint256 totalAdditionalRecipients = additionalRecipients.length;
-
-        // Skip overflow check as for loop is indexed starting at zero.
-        unchecked {
-            // Iterate over each additional recipient.
-            for (uint256 i = 0; i < totalAdditionalRecipients; ++i) {
-                // Retrieve the additional recipient.
-                Payment calldata additionalRecipient = (
-                    additionalRecipients[i]
-                );
-
-                // Read ether amount to transfer to recipient & place on stack.
-                uint256 additionalRecipientAmount = additionalRecipient.amount;
-
-                // Ensure that sufficient Ether is available.
-                if (additionalRecipientAmount > etherRemaining) {
-                    revert InsufficientEtherSupplied();
-                }
-
-                // Transfer Ether to the additional recipient.
-                _transferEth(additionalRecipient.to, additionalRecipientAmount);
-
-                // Reduce ether value available. Skip underflow check as
-                // subtracted value is confirmed above as less than remaining.
-                etherRemaining -= additionalRecipientAmount;
-            }
-        }
 
         // Ensure that sufficient Ether is still available.
         if (amount > etherRemaining) {
@@ -55,7 +23,7 @@ contract TransferHelper {
 
     function _transferEth(address payable to, uint256 amount) internal {
         // Declare a variable indicating whether the call was successful or not.
-        (bool success, ) = to.call{value: amount}("");
+        (bool success, ) = to.call{value: amount}('');
 
         // If the call fails...
         if (!success) {
@@ -112,75 +80,70 @@ contract TransferHelper {
                 0
             )
 
-            // // If the transfer reverted:
-            // if iszero(success) {
-            //     // If it returned a message, bubble it up as long as sufficient
-            //     // gas remains to do so:
-            //     if returndatasize() {
-            //         // Ensure that sufficient gas is available to copy
-            //         // returndata while expanding memory where necessary. Start
-            //         // by computing word size of returndata & allocated memory.
-            //         // Round up to the nearest full word.
-            //         let returnDataWords := div(
-            //             add(returndatasize(), AlmostOneWord),
-            //             OneWord
-            //         )
+            // If the transfer reverted:
+            if iszero(success) {
+                // If it returned a message, bubble it up as long as sufficient
+                // gas remains to do so:
+                if returndatasize() {
+                    // Ensure that sufficient gas is available to copy
+                    // returndata while expanding memory where necessary. Start
+                    // by computing word size of returndata & allocated memory.
+                    // Round up to the nearest full word.
+                    let returnDataWords := div(
+                        add(returndatasize(), AlmostOneWord),
+                        OneWord
+                    )
+                    // Note: use the free memory pointer in place of msize() to
+                    // work around a Yul warning that prevents accessing msize
+                    // directly when the IR pipeline is activated.
+                    let msizeWords := div(memPointer, OneWord)
+                    // Next, compute the cost of the returndatacopy.
+                    let cost := mul(CostPerWord, returnDataWords)
 
-            //         // Note: use the free memory pointer in place of msize() to
-            //         // work around a Yul warning that prevents accessing msize
-            //         // directly when the IR pipeline is activated.
-            //         let msizeWords := div(memPointer, OneWord)
-
-            //         // Next, compute the cost of the returndatacopy.
-            //         let cost := mul(CostPerWord, returnDataWords)
-
-            //         // Then, compute cost of new memory allocation.
-            //         if gt(returnDataWords, msizeWords) {
-            //             cost := add(
-            //                 cost,
-            //                 add(
-            //                     mul(
-            //                         sub(returnDataWords, msizeWords),
-            //                         CostPerWord
-            //                     ),
-            //                     div(
-            //                         sub(
-            //                             mul(returnDataWords, returnDataWords),
-            //                             mul(msizeWords, msizeWords)
-            //                         ),
-            //                         MemoryExpansionCoefficient
-            //                     )
-            //                 )
-            //             )
-            //         }
-
-            //         // Finally, add a small constant and compare to gas
-            //         // remaining; bubble up the revert data if enough gas is
-            //         // still available.
-            //         if lt(add(cost, ExtraGasBuffer), gas()) {
-            //             // Copy returndata to memory; overwrite existing memory.
-            //             returndatacopy(0, 0, returndatasize())
-
-            //             // Revert, giving memory region with copied returndata.
-            //             revert(0, returndatasize())
-            //         }
-            //     }
-
-            //     // Otherwise revert with a generic error message.
-            //     mstore(
-            //         TokenTransferGenericFailure_error_sig_ptr,
-            //         TokenTransferGenericFailure_error_signature
-            //     )
-            //     mstore(TokenTransferGenericFailure_error_token_ptr, token)
-            //     mstore(TokenTransferGenericFailure_error_from_ptr, from)
-            //     mstore(TokenTransferGenericFailure_error_to_ptr, to)
-            //     mstore(TokenTransferGenericFailure_error_id_ptr, identifier)
-            //     mstore(TokenTransferGenericFailure_error_amount_ptr, 1)
-            //     revert(
-            //         TokenTransferGenericFailure_error_sig_ptr,
-            //         TokenTransferGenericFailure_error_length
-            //     )
-            // }
+                    // Then, compute cost of new memory allocation.
+                    if gt(returnDataWords, msizeWords) {
+                        cost := add(
+                            cost,
+                            add(
+                                mul(
+                                    sub(returnDataWords, msizeWords),
+                                    CostPerWord
+                                ),
+                                div(
+                                    sub(
+                                        mul(returnDataWords, returnDataWords),
+                                        mul(msizeWords, msizeWords)
+                                    ),
+                                    MemoryExpansionCoefficient
+                                )
+                            )
+                        )
+                    }
+                    // Finally, add a small constant and compare to gas
+                    // remaining; bubble up the revert data if enough gas is
+                    // still available.
+                    if lt(add(cost, ExtraGasBuffer), gas()) {
+                        // Copy returndata to memory; overwrite existing memory.
+                        returndatacopy(0, 0, returndatasize())
+                        // Revert, giving memory region with copied returndata.
+                        revert(0, returndatasize())
+                    }
+                }
+                // Otherwise revert with a generic error message.
+                mstore(
+                    TokenTransferGenericFailure_error_sig_ptr,
+                    TokenTransferGenericFailure_error_signature
+                )
+                mstore(TokenTransferGenericFailure_error_token_ptr, token)
+                mstore(TokenTransferGenericFailure_error_from_ptr, from)
+                mstore(TokenTransferGenericFailure_error_to_ptr, to)
+                mstore(TokenTransferGenericFailure_error_id_ptr, identifier)
+                mstore(TokenTransferGenericFailure_error_amount_ptr, 1)
+                revert(
+                    TokenTransferGenericFailure_error_sig_ptr,
+                    TokenTransferGenericFailure_error_length
+                )
+            }
 
             // Restore the original free memory pointer.
             mstore(FreeMemoryPointerSlot, memPointer)
