@@ -6,13 +6,15 @@ import {IERC2981} from '../../lib/openzeppelin-contracts/contracts/interfaces/IE
 interface ISimpleReceiver is IERC2981 {
     event RoyaltyStatus(
         address indexed operator,
-        address indexed royaltyPayer,
-        uint256 royaltyAmount
+        address indexed payer,
+        address indexed currency,
+        uint256 amount
     );
 
     function onRoyaltyReceived(
         uint256 _tokenId,
-        address _royaltyPayer,
+        address _payer,
+        address _currency,
         bytes calldata _data
     ) external payable returns (bytes4);
 }
