@@ -1,0 +1,7 @@
+{
+    "network": "mainnet",
+    "token": {
+        "address": "0xe3c1b523b86dabc3770b8335ea9a66e696ce9a1b",
+        "startBlock": 8389172
+    }
+}
