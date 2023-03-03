@@ -11,14 +11,10 @@ export function Layout({ children }) {
     return (
         <>
             {isMounted && <>
-                {isConnected
-                    ? <>
-                        <Header />
-                        {children}
-                    </>
-                    : <>
-                        <Connect />
-                    </>}
+                <>
+                    <Header />
+                    {children}
+                </>
             </>}
         </>
     );

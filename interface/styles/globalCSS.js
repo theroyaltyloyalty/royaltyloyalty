@@ -4,7 +4,7 @@ export const globalCSS = {
         Button: {
             baseStyle: {
                 fontWeight: '',
-                borderRadius: ''
+                borderRadius: 'full'
             },
             defaultProps: {
                 colorScheme: '',
@@ -15,6 +15,13 @@ export const globalCSS = {
             baseStyle: {
                 dialogContainer: {
                     '@supports(height: -webkit-fill-available)': {},
+                }
+            }
+        },
+        Table: {
+            baseStyle: {
+                td: {
+                    textAlign: 'center'
                 }
             }
         }
