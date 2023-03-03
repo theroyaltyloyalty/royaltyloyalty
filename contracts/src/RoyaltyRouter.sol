@@ -33,24 +33,38 @@ contract Router is IExchangeLike {
     ) external payable {
         Exchange(exchange).buy(nft, id, receiver, additionalPayments);
 
+        address currency = ISimpleReceiver(nft).royaltyCurrencyInfo(id);
         if (IERC165(nft).supportsInterface(type(ISimpleReceiver).interfaceId)) {
             (uint96 amount, ) = Exchange(exchange).listings(nft, id);
             if (respect) {
                 (address royaltyTo, uint256 royaltyAmount) = ISimpleReceiver(
                     nft
                 ).royaltyInfo(id, amount);
-                address currency = ISimpleReceiver(nft).royaltyCurrencyInfo(id);
 
-                bool success;
                 if (currency == address(0)) {
-                    (success, ) = royaltyTo.call{value: royaltyAmount}('');
+                    ISimpleReceiver(nft).onRoyaltyReceived{
+                        value: royaltyAmount
+                    }(id, msg.sender, currency, '');
                 } else {
-                    success = ERC20(currency).transfer(
+                    ERC20(currency).transferFrom(
+                        msg.sender,
                         royaltyTo,
                         royaltyAmount
                     );
+                    ISimpleReceiver(nft).onRoyaltyReceived(
+                        id,
+                        msg.sender,
+                        currency,
+                        ''
+                    );
                 }
-                require(success);
+            } else {
+                ISimpleReceiver(nft).onRoyaltyReceived(
+                    id,
+                    msg.sender,
+                    currency,
+                    ''
+                );
             }
         }
     }
