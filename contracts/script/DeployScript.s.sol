@@ -15,6 +15,7 @@ contract DeployScript is Script {
     function deployTestnet() public {
         router = new MockRouter();
         token = new MockRoyaltyToken();
+        for (uint256 i; i < 20; i++) token.mint(i);
     }
 
     function run() public virtual {
