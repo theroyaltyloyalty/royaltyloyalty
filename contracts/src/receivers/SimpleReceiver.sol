@@ -6,8 +6,14 @@ import {ISimpleReceiver} from '../interfaces/ISimpleReceiver.sol';
 import {ERC20} from '../../lib/solmate/src/tokens/ERC20.sol';
 
 abstract contract RoyaltyReceiver is ISimpleReceiver, ERC2981 {
-    RoyaltyInfo private _defaultRoyaltyInfo;
-    mapping(uint256 => RoyaltyInfo) private _tokenRoyaltyInfo;
+    struct RoyaltyInformation {
+        address receiver;
+        uint96 royaltyFraction;
+        address currency;
+    }
+
+    RoyaltyInformation private _defaultRoyaltyInfo;
+    mapping(uint256 => RoyaltyInformation) private _tokenRoyaltyInfo;
     mapping(address => mapping(address => uint256)) private _royaltyAccrued;
     mapping(address => uint256) private _previousBalance;
 
@@ -30,7 +36,7 @@ abstract contract RoyaltyReceiver is ISimpleReceiver, ERC2981 {
         override(ERC2981, IERC2981)
         returns (address, uint256)
     {
-        RoyaltyInfo memory royalty = _tokenRoyaltyInfo[tokenId];
+        RoyaltyInformation memory royalty = _tokenRoyaltyInfo[tokenId];
 
         if (royalty.receiver == address(0)) {
             royalty = _defaultRoyaltyInfo;
@@ -40,6 +46,14 @@ abstract contract RoyaltyReceiver is ISimpleReceiver, ERC2981 {
             _feeDenominator();
 
         return (address(this), royaltyAmount);
+    }
+
+    function royaltyCurrencyInfo(uint256 _tokenId)
+        external
+        view
+        returns (address)
+    {
+        return _tokenRoyaltyInfo[_tokenId].currency;
     }
 
     function onRoyaltyReceived(
@@ -84,5 +98,50 @@ abstract contract RoyaltyReceiver is ISimpleReceiver, ERC2981 {
         }
         _previousBalance[currency] = ERC20(currency).balanceOf(address(this));
         require(success);
+    }
+
+    function _setDefaultRoyalty(
+        address receiver,
+        uint96 royaltyNumerator,
+        address currency
+    ) internal virtual {
+        require(
+            (royaltyNumerator <= _feeDenominator()),
+            'ERC2981: royalty fee will exceed salePrice'
+        );
+        require(receiver != address(0), 'ERC2981: invalid receiver');
+
+        _defaultRoyaltyInfo = RoyaltyInformation(
+            receiver,
+            royaltyNumerator,
+            currency
+        );
+    }
+
+    function _deleteDefaultRoyalty() internal virtual override {
+        delete _defaultRoyaltyInfo;
+    }
+
+    function _setTokenRoyalty(
+        uint256 tokenId,
+        address receiver,
+        uint96 royaltyNumerator,
+        address currency
+    ) internal virtual {
+        require(
+            (royaltyNumerator <= _feeDenominator()),
+            'ERC2981: royalty fee will exceed salePrice'
+        );
+        require(receiver != address(0), 'ERC2981: Invalid parameters');
+
+        _tokenRoyaltyInfo[tokenId] = RoyaltyInformation(
+            receiver,
+            royaltyNumerator,
+            currency
+        );
+    }
+
+    function _resetTokenRoyalty(uint256 tokenId) internal virtual override {
+        delete _tokenRoyaltyInfo[tokenId];
     }
 }
