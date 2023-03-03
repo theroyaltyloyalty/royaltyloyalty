@@ -2,10 +2,12 @@
 pragma solidity ^0.8.13;
 
 import 'forge-std/Test.sol';
-import 'src/receivers/RoyaltyReceiver.sol';
+import 'src/receivers/SimpleReceiver.sol';
 import {MockERC721, ERC721} from 'test/mocks/MockTokens.sol';
 
 contract MockRoyaltyToken is MockERC721, RoyaltyReceiver {
+    address seller = address(42);
+
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -14,6 +16,10 @@ contract MockRoyaltyToken is MockERC721, RoyaltyReceiver {
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    function mockTransferEmitter(address buyer, uint256 id) public {
+        emit Transfer(seller, buyer, id);
     }
 }
 
@@ -24,25 +30,26 @@ contract MockRouter {
         uint256 price,
         address buyer
     ) public payable {
-        IRoyaltyReceiver(royaltyToken).onRoyaltyReceived{value: msg.value}(
+        RoyaltyReceiver(royaltyToken).onRoyaltyReceived{value: msg.value}(
             id,
-            price,
             buyer,
+            address(0),
             ''
         );
+        MockRoyaltyToken(royaltyToken).mockTransferEmitter(buyer, id);
     }
 }
 
 contract RoyaltyReceiverTest is Test {
     MockRoyaltyToken nft;
     MockRouter router;
-    event RoyaltyStatus(
+    event RoyaltyPayment(
         address indexed operator,
-        address indexed royaltyPayer,
-        uint256 expectedAmount,
-        uint256 actualAmount,
-        bool royaltyRespected
+        address indexed payer,
+        address indexed currency,
+        uint256 amount
     );
+    event Transfer(address indexed from, address indexed to, uint256 id);
 
     function setUp() public {
         router = new MockRouter();
@@ -53,7 +60,13 @@ contract RoyaltyReceiverTest is Test {
 
     function testSendRoyalty() public {
         vm.expectEmit(true, true, true, true);
-        emit RoyaltyStatus(address(router), address(this), 0, 0.1 ether, true);
+        emit RoyaltyPayment(
+            address(router),
+            address(this),
+            address(0),
+            0.1 ether
+        );
+        emit Transfer(address(42), address(this), 1);
         router.mockRoyaltyPayment{value: 0.1 ether}(
             address(nft),
             1,
@@ -61,10 +74,6 @@ contract RoyaltyReceiverTest is Test {
             address(this)
         );
         assertEq(address(nft).balance, 0.1 ether);
-    }
-
-    function testTrue() public {
-        assertTrue(true);
     }
 
     receive() external payable {}

@@ -65,7 +65,7 @@ abstract contract RoyaltyReceiver is ISimpleReceiver, ERC2981 {
 
         _royaltyAccrued[royaltyReceiver][currency] += amount;
 
-        emit RoyaltyStatus(msg.sender, royaltyPayer, currency, amount);
+        emit RoyaltyPayment(msg.sender, royaltyPayer, currency, amount);
 
         return ISimpleReceiver.onRoyaltyReceived.selector;
     }
