@@ -1,23 +1,23 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+pragma solidity ^0.8.13;
 
-import "forge-std/Test.sol";
-import {ERC20} from "solmate/tokens/ERC20.sol";
-import {ERC721} from "solmate/tokens/ERC721.sol";
-import {ERC1155} from "solmate/tokens/ERC1155.sol";
+import 'forge-std/Test.sol';
+import {ERC20} from 'solmate/tokens/ERC20.sol';
+import {ERC721} from 'solmate/tokens/ERC721.sol';
+import {ERC1155} from 'solmate/tokens/ERC1155.sol';
 
-import {IERC20} from "forge-std/interfaces/IERC20.sol";
-import {IERC721} from "forge-std/interfaces/IERC721.sol";
-import {IERC1155} from "forge-std/interfaces/IERC1155.sol";
+import {IERC20} from 'forge-std/interfaces/IERC20.sol';
+import {IERC721} from 'forge-std/interfaces/IERC721.sol';
+import {IERC1155} from 'forge-std/interfaces/IERC1155.sol';
 
-import "src/Exchange.sol";
-import "src/RoyaltyRouter.sol";
+import 'src/Exchange.sol';
+import 'src/RoyaltyRouter.sol';
 
-contract MockERC20 is ERC20("", "", 18) {}
+contract MockERC20 is ERC20('', '', 18) {}
 
-contract MockERC721 is ERC721("", "") {
+contract MockERC721 is ERC721('', '') {
     function tokenURI(uint256) public pure override returns (string memory) {
-        return "";
+        return '';
     }
 
     function mint(uint256 id) public {
@@ -27,7 +27,7 @@ contract MockERC721 is ERC721("", "") {
 
 contract MockERC1155 is ERC1155 {
     function uri(uint256) public pure override returns (string memory) {
-        return "";
+        return '';
     }
 }
 

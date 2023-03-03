@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "./TransferConstants.sol";
-import "./TransferHelper.sol";
-import "./Structs.sol";
-import "./Errors.sol";
+import './TransferConstants.sol';
+import './TransferHelper.sol';
+import './Structs.sol';
+import './Errors.sol';
 
-import {IERC721} from "forge-std/interfaces/IERC721.sol";
+import {IERC721} from 'forge-std/interfaces/IERC721.sol';
 
 contract Exchange is TransferHelper {
     event List(

@@ -17,4 +17,9 @@ interface ISimpleReceiver is IERC2981 {
         address _currency,
         bytes calldata _data
     ) external payable returns (bytes4);
+
+    function royaltyCurrencyInfo(uint256 _tokenId)
+        external
+        view
+        returns (address);
 }
