@@ -4,5 +4,7 @@
     "eslint.workingDirectories": [
         "./contracts",
         "./interface"
-    ]
+    ],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
 }
