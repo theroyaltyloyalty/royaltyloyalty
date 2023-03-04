@@ -12,8 +12,8 @@ contract MockERC721 is ERC721('', '') {
         return '';
     }
 
-    function mint(uint256 id) public {
-        _mint(msg.sender, id);
+    function mint(uint256 id, address to) public {
+        _mint(to, id);
     }
 }
 

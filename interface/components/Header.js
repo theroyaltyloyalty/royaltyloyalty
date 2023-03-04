@@ -1,11 +1,13 @@
 import {
-    Container, Button, Tab, Tabs, TabList, TabPanels, TabPanel, Text
+    Container, Tab, Tabs, TabList, Text
 } from '@chakra-ui/react';
-import { Connect } from './index';
+import { Connect, ConnectLens } from './index';
 import { FaCarrot } from 'react-icons/fa';
 import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
 
 export function Header() {
+    const { isConnected } = useAccount();
     const router = useRouter();
 
     function handleTabs(num) {
@@ -42,6 +44,7 @@ export function Header() {
                     <Tab>Tokens</Tab>
                 </TabList>
             </Tabs>
+            {isConnected && <ConnectLens/>}
             <Connect />
         </Container>
     );

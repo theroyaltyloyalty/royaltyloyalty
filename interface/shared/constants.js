@@ -4,3 +4,5 @@ export const dateFilter = [
     { text: 'Last 30 days' },
     { text: 'All' },
 ];
+
+export const fetched = { fetched: false, tries: 0 };

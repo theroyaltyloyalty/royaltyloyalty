@@ -22,6 +22,9 @@ export const globalCSS = {
             baseStyle: {
                 td: {
                     textAlign: 'center'
+                },
+                th: {
+                    textAlign: 'center'
                 }
             }
         }
@@ -42,6 +45,10 @@ export const globalCSS = {
     },
     styles: {
         global: {
+            '.column-short': {
+                padding: '16px 0 !important',
+                width: '10% !important'
+            },
             'html, body': {
                 color: 'white',
                 background: '#191919',
