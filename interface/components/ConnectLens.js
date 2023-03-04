@@ -3,7 +3,7 @@ import { Button, Container, Image, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useSigner } from 'wagmi';
 import { MainContext } from '../contexts/MainContext';
-import { checkProfile } from '../gqlQueries/checkProfile';
+import { checkProfile } from '../gqlQueries';
 import { useApolloClient, useToastErr } from '../hooks';
 import { fetched } from '../shared/constants';
 
@@ -100,7 +100,10 @@ export function ConnectLens() {
                     width='32px'
                     height='32px'
                     alt={handle}
-                    src={`https://user-content.lenster.xyz/300x300/https://gateway.ipfscdn.io/ipfs/${ipfs}`}
+                    src={ipfs.indexOf('https://cdn.stamp.fyi/avatar/') > -1
+                        ? ipfs
+                        : `https://user-content.lenster.xyz/300x300/https://gateway.ipfscdn.io/ipfs/${ipfs}`
+                    }
                     marginRight='4px'
                 />
                 <Text fontWeight='bold'>{handle}</Text>

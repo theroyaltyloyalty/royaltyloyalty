@@ -9,7 +9,7 @@ import { useContext, useState } from 'react';
 import { BsChevronDown } from 'react-icons/bs';
 import { useAccount } from 'wagmi';
 import { MainContext } from '../contexts/MainContext';
-import { mutateFollowFee } from '../gqlQueries/mutateFollowFee';
+import { checkProfile, doesFollow, mutateFollowFee } from '../gqlQueries';
 import { useApolloClient, useIsMounted, useToastErr } from '../hooks';
 import { dateFilter } from '../shared/constants';
 import { formatWallet } from '../shared/utils';
@@ -48,6 +48,25 @@ function Home() {
                 .catch(err => toastErr(err));
         }
     }
+
+    function checkFollower() {
+        const address = '0xACf5dE5F808de693Ee328e5F5783be01E86920FA';
+        const _checkProfile = gql`${checkProfile(address)}`;
+        client.query({ query: _checkProfile })
+            .then(res => {
+                const { items } = res.data.profiles;
+                if (items.length > 0) {
+                    const { id } = items[0];
+                    const _doesFollow = gql`${doesFollow(address, id)}`;
+                    client.query({ query: _doesFollow })
+                        .then(res => {
+                            console.log('res: ', res);
+                            // TODO: frh -> does not get to here if has no lens
+                        }).catch(err => toastErr(err));
+                }
+            }).catch(err => toastErr(err));
+    }
+
 
     return (
         <div>
