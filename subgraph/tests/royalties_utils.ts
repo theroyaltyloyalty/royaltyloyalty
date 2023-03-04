@@ -1,6 +1,9 @@
 import { newMockEvent } from 'matchstick-as';
 import { ethereum, BigInt, Address } from '@graphprotocol/graph-ts';
-import { Transfer } from '../src/types/RoyaltyToken/RoyaltyToken';
+import {
+    Transfer,
+    RoyaltyPayment
+} from '../src/types/RoyaltyToken/RoyaltyToken';
 
 export function createTransferEvent(
     from: Address,
@@ -17,10 +20,32 @@ export function createTransferEvent(
         )
     ];
 
-    // const a = depositEvent.parameters[0].value.toAddress().toHexString();
-    // const b = depositEvent.parameters[1].value.toAddress().toHexString();
-    // const c = depositEvent.parameters[2].value.toBigInt().toString();
-    // log.info('TEST {} {} {}', [a, b, c]);
-    //
     return transferEvent;
+}
+export function createRoyaltyPaymentEvent(
+    operator: Address,
+    payer: Address,
+    currency: Address,
+    id: BigInt,
+    amount: BigInt
+): RoyaltyPayment {
+    const royaltyPayment = changetype<RoyaltyPayment>(newMockEvent());
+    royaltyPayment.parameters = [
+        new ethereum.EventParam(
+            'operator',
+            ethereum.Value.fromAddress(operator)
+        ),
+        new ethereum.EventParam('payer', ethereum.Value.fromAddress(payer)),
+        new ethereum.EventParam(
+            'currency',
+            ethereum.Value.fromAddress(currency)
+        ),
+        new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(id)),
+        new ethereum.EventParam(
+            'amount',
+            ethereum.Value.fromUnsignedBigInt(amount)
+        )
+    ];
+
+    return royaltyPayment;
 }

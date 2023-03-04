@@ -18,9 +18,12 @@ dataSources:
       file: ./src/royalty-erc721.ts
       entities:
         - TransferEvent
+        - RoyaltyEvent
       abis:
         - name: RoyaltyToken
           file: ./abi/RoyaltyToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: RoyaltyPayment(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleRoyalty
