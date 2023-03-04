@@ -26,13 +26,16 @@ contract DeployScript is Script {
 
         token.setApprovalForAll(address(router), true);
 
-        for (uint256 i; i < 20; i++)
-            router.mockRoyaltyPayment(
+        uint256 value;
+        for (uint256 i; i < 20; i++) {
+            value = i % 2 == 0 ? 0.05 ether : 0;
+            router.mockRoyaltyPayment{value: value}(
                 address(token),
                 i,
-                0.05 ether,
+                value,
                 makeAddr(Strings.toString(i))
             );
+        }
 
         vm.stopBroadcast();
     }
