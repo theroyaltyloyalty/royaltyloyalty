@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import infuraClient from 'services/infuraClient';
 import { Owner } from 'types/infuraTypes';
+import { OwnerData } from 'types/types';
 
 interface Response {
     cursor: string;
@@ -9,12 +10,6 @@ interface Response {
     pageNumber: number;
     pageSize: number;
     owners: Owner[];
-}
-
-interface OwnerData {
-    address: string;
-    balance: number;
-    tokens: string[];
 }
 
 const getAllOwners = async (tokenAddress: string) => {
