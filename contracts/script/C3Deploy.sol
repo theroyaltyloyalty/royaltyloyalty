@@ -12,7 +12,7 @@ contract C3Deploy is Script {
 
     bytes creationCode = hex''; //deployment code from dry run
 
-    function run() public returns (CREATE3Factory factory) {
+    function run() public {
         uint256 deployerPrivateKey = 0xbe4226c5bb313a56473ebcbe0a6a3b9b0ca1933089aeaa67dca88d9c04e480e0;
 
         vm.startBroadcast(deployerPrivateKey);
