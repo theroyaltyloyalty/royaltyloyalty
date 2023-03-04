@@ -8,6 +8,7 @@ interface ISimpleReceiver is IERC2981 {
         address indexed operator,
         address indexed payer,
         address indexed currency,
+        uint256 id,
         uint256 amount
     );
 
