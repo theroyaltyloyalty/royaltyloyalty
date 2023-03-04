@@ -6,9 +6,8 @@ import {
     walletConnectProvider
 } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
-import * as React from 'react';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { goerli, hardhat, polygonMumbai } from 'wagmi/chains';
+import { WagmiConfig, configureChains, createClient } from 'wagmi';
+import { polygonMumbai } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
@@ -23,7 +22,7 @@ const theme = extendTheme(globalCSS);
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 const alchemyMumbaiKey = process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI_KEY;
 
-const chains = [polygonPocket, polygonMumbai, goerli, hardhat];
+const chains = [polygonPocket, polygonMumbai];
 
 const providers = [
     jsonRpcProvider({

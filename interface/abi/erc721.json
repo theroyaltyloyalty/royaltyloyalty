@@ -73,6 +73,12 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
             }
@@ -107,16 +113,8 @@
     },
     {
         "inputs": [
-            {
-                "internalType": "address",
-                "name": "spender",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            }
+            { "internalType": "address", "name": "spender", "type": "address" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" }
         ],
         "name": "approve",
         "outputs": [],
@@ -125,19 +123,11 @@
     },
     {
         "inputs": [
-            {
-                "internalType": "address",
-                "name": "owner",
-                "type": "address"
-            }
+            { "internalType": "address", "name": "owner", "type": "address" }
         ],
         "name": "balanceOf",
         "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+            { "internalType": "uint256", "name": "", "type": "uint256" }
         ],
         "stateMutability": "view",
         "type": "function"
@@ -149,73 +139,40 @@
                 "name": "receiver",
                 "type": "address"
             },
-            {
-                "internalType": "address",
-                "name": "currency",
-                "type": "address"
-            }
+            { "internalType": "address", "name": "currency", "type": "address" }
         ],
         "name": "claimRoyalty",
         "outputs": [
-            {
-                "internalType": "bool",
-                "name": "success",
-                "type": "bool"
-            }
+            { "internalType": "bool", "name": "success", "type": "bool" }
         ],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+            { "internalType": "uint256", "name": "", "type": "uint256" }
         ],
         "name": "getApproved",
         "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
+            { "internalType": "address", "name": "", "type": "address" }
         ],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
+            { "internalType": "address", "name": "", "type": "address" },
+            { "internalType": "address", "name": "", "type": "address" }
         ],
         "name": "isApprovedForAll",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            }
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "address", "name": "to", "type": "address" }
         ],
         "name": "mint",
         "outputs": [],
@@ -224,16 +181,8 @@
     },
     {
         "inputs": [
-            {
-                "internalType": "address",
-                "name": "buyer",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            }
+            { "internalType": "address", "name": "buyer", "type": "address" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" }
         ],
         "name": "mockTransferEmitter",
         "outputs": [],
@@ -243,23 +192,13 @@
     {
         "inputs": [],
         "name": "name",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            },
+            { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
             {
                 "internalType": "address",
                 "name": "royaltyPayer",
@@ -270,49 +209,38 @@
                 "name": "currency",
                 "type": "address"
             },
-            {
-                "internalType": "bytes",
-                "name": "",
-                "type": "bytes"
-            }
+            { "internalType": "bytes", "name": "", "type": "bytes" }
         ],
         "name": "onRoyaltyReceived",
-        "outputs": [
-            {
-                "internalType": "bytes4",
-                "name": "",
-                "type": "bytes4"
-            }
-        ],
+        "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
         "stateMutability": "payable",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            }
+            { "internalType": "uint256", "name": "id", "type": "uint256" }
         ],
         "name": "ownerOf",
         "outputs": [
-            {
-                "internalType": "address",
-                "name": "owner",
-                "type": "address"
-            }
+            { "internalType": "address", "name": "owner", "type": "address" }
         ],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            },
+            { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
+        ],
+        "name": "royaltyCurrencyInfo",
+        "outputs": [
+            { "internalType": "address", "name": "", "type": "address" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
             {
                 "internalType": "uint256",
                 "name": "salePrice",
@@ -321,37 +249,17 @@
         ],
         "name": "royaltyInfo",
         "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+            { "internalType": "address", "name": "", "type": "address" },
+            { "internalType": "uint256", "name": "", "type": "uint256" }
         ],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            }
+            { "internalType": "address", "name": "from", "type": "address" },
+            { "internalType": "address", "name": "to", "type": "address" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" }
         ],
         "name": "safeTransferFrom",
         "outputs": [],
@@ -360,26 +268,10 @@
     },
     {
         "inputs": [
-            {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-            }
+            { "internalType": "address", "name": "from", "type": "address" },
+            { "internalType": "address", "name": "to", "type": "address" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "bytes", "name": "data", "type": "bytes" }
         ],
         "name": "safeTransferFrom",
         "outputs": [],
@@ -393,11 +285,7 @@
                 "name": "operator",
                 "type": "address"
             },
-            {
-                "internalType": "bool",
-                "name": "approved",
-                "type": "bool"
-            }
+            { "internalType": "bool", "name": "approved", "type": "bool" }
         ],
         "name": "setApprovalForAll",
         "outputs": [],
@@ -413,65 +301,31 @@
             }
         ],
         "name": "supportsInterface",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [],
         "name": "symbol",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
+            { "internalType": "uint256", "name": "", "type": "uint256" }
         ],
         "name": "tokenURI",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
         "stateMutability": "pure",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            }
+            { "internalType": "address", "name": "from", "type": "address" },
+            { "internalType": "address", "name": "to", "type": "address" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" }
         ],
         "name": "transferFrom",
         "outputs": [],
