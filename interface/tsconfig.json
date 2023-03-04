@@ -1,4 +1,6 @@
 {
+    // Lens required @see{https://docs.lens.xyz/docs/developer-quickstart}
+    "noImplicitAny": false,
     "compilerOptions": {
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
