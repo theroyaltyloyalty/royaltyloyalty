@@ -1,12 +1,15 @@
 import { isAddress } from '@ethersproject/address';
 import useOwners from 'hooks/useOwners';
+import useRoyalties from 'hooks/useRoyalties';
 import useTokens from 'hooks/useTokens';
 import useTransfers from 'hooks/useTransfers';
 import type { GetServerSideProps, NextPage } from 'next';
+import { useContext } from 'react';
 import infuraClient from 'services/infuraClient';
 import { Collection } from 'types/infuraTypes';
 import { shortenAddress } from 'utils/address';
-import useRoyalties from 'hooks/useRoyalties';
+import { Social } from '../../components';
+import { MainContext } from '../../contexts/MainContext';
 
 const addRoyaltyData = (transfers, royaltyData) => {
     const transfersWithRoyalty = {};
@@ -25,6 +28,8 @@ const addRoyaltyData = (transfers, royaltyData) => {
 };
 
 const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
+    const { profile } = useContext(MainContext);
+    const { profileId } = profile;
     const { data: tokens } = useTokens(collection.contract);
     const { data: owners } = useOwners(collection.contract);
     const { data: transfers } = useTransfers(collection.contract);
@@ -61,6 +66,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         <tr>
                             <th>Address</th>
                             <th>Balance</th>
+                            {profileId && <th className='column-short'>Social</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -68,6 +74,12 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                             <tr key={owner.address}>
                                 <td>{shortenAddress(owner.address)}</td>
                                 <td>{owner.balance}</td>
+                                <td>
+                                    <Social 
+                                        address={owner.address}
+                                        id={profileId}
+                                    />
+                                </td>
                             </tr>
                         ))}
                     </tbody>
