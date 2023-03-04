@@ -1,6 +1,6 @@
-import { useChainId } from 'wagmi';
 import { useQuery } from '@tanstack/react-query';
 import infuraClient from 'services/infuraClient';
+import { useChainId } from 'wagmi';
 
 export default function useHolders(tokenAddress: string) {
     const chainId = useChainId();
@@ -8,8 +8,6 @@ export default function useHolders(tokenAddress: string) {
     return useQuery({
         queryKey: ['holders', tokenAddress],
         queryFn: () =>
-            infuraClient.get(
-                `/networks/${chainId}/nfts/${tokenAddress}/owners`
-            ),
+            infuraClient.get(`/networks/${chainId}/nfts/${tokenAddress}owners`),
     });
 }
