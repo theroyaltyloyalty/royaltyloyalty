@@ -1,5 +1,10 @@
 import { Transfer } from './infuraTypes';
 
+export interface RoyaltyData {
+    totalPaid: string;
+    royaltyPayments: RoyaltyPayment[];
+}
+
 export interface RoyaltyPayment {
     operator: string;
     payer: string;
@@ -12,4 +17,10 @@ export interface RoyaltyPayment {
 
 export interface TransferWithRoyalty extends Transfer {
     royaltyPayment: RoyaltyPayment | null;
+}
+
+export interface OwnerData {
+    address: string;
+    balance: number;
+    tokens: string[];
 }
