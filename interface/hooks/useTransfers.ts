@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Erc721__factory as Erc21Factory } from 'contracts';
 import infuraClient from 'services/infuraClient';
-import provider from 'services/provider';
 import { Transfer } from 'types/infuraTypes';
 import { RoyaltyPayment, TransferWithRoyalty } from 'types/types';
 
@@ -46,35 +44,6 @@ const getAllTransfers = async (tokenAddress: string) => {
     return transfers;
 };
 
-const getAllRoyaltyPayments = async (tokenAddress: string) => {
-    const contract = Erc21Factory.connect(tokenAddress, provider);
-    const filter = contract.filters.RoyaltyPayment();
-    const events = await contract.queryFilter(filter);
-
-    return events.map((event) => {
-        return {
-            operator: event.args.operator,
-            payer: event.args.payer,
-            currency: event.args.currency,
-            amount: event.args.amount.toString(),
-            tokenId: event.args.id.toString(),
-            transactionHash: event.transactionHash,
-            blockNumber: event.blockNumber,
-        };
-    });
-};
-
-const formatRoyalties = (royaltyPayments: RoyaltyPayment[]) => {
-    const formatted: Record<string, RoyaltyPayment> = {};
-
-    royaltyPayments.forEach((payment) => {
-        const key = `${payment.tokenId}-${payment.transactionHash}`;
-        formatted[key] = payment;
-    });
-
-    return formatted;
-};
-
 const addRoyaltiesToTransfers = (
     transfers: Transfer[],
     royalties: Record<string, RoyaltyPayment>
@@ -112,18 +81,8 @@ export default function useTransfers(tokenAddress: string) {
     return useQuery({
         queryKey: ['transactions', tokenAddress],
         queryFn: async () => {
-            const [transfers, royaltyPayments] = await Promise.all([
-                getAllTransfers(tokenAddress),
-                getAllRoyaltyPayments(tokenAddress),
-            ]);
-
-            const formattedRoyalties = formatRoyalties(royaltyPayments);
-            const transfersWithRoyalties = addRoyaltiesToTransfers(
-                transfers,
-                formattedRoyalties
-            );
-
-            return transfersWithRoyalties;
+            const transfers = await getAllTransfers(tokenAddress);
+            return transfers;
         },
     });
 }

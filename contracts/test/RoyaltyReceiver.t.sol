@@ -47,6 +47,7 @@ contract RoyaltyReceiverTest is Test {
         address indexed operator,
         address indexed payer,
         address indexed currency,
+        uint256 id,
         uint256 amount
     );
     event Transfer(address indexed from, address indexed to, uint256 id);
@@ -66,6 +67,7 @@ contract RoyaltyReceiverTest is Test {
             address(router),
             address(this),
             address(0),
+            1,
             0.1 ether
         );
         emit Transfer(address(42), address(this), 1);

@@ -7,22 +7,8 @@ import infuraClient from 'services/infuraClient';
 import { Collection } from 'types/infuraTypes';
 import { shortenAddress } from 'utils/address';
 import useRoyalties from 'hooks/useRoyalties';
-
-const addRoyaltyData = (transfers, royaltyData) => {
-    const transfersWithRoyalty = {};
-
-    transfers.forEach((transfer) => {
-        const royalty = royaltyData.find(
-            (royalty) => royalty.tokenId === transfer.tokenId
-        );
-        transfersWithRoyalty[transfer.tokenId] = {
-            ...transfer,
-            royalty,
-        };
-    });
-
-    return transfersWithRoyalty;
-};
+import useTransfersWithRoyalties from 'hooks/useTransfersWithRoyalties';
+import useTransferMappings from 'hooks/useTransferMappings';
 
 const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     const { data: tokens } = useTokens(collection.contract);
@@ -30,8 +16,13 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     const { data: transfers } = useTransfers(collection.contract);
     const { data: royaltyData } = useRoyalties(collection.contract);
 
-    const transfersWithRoyalty = {};
-    const ownersTransfersData = {};
+    const transfersWithRoyalty = useTransfersWithRoyalties(
+        transfers,
+        royaltyData
+    );
+
+    const { ownersToTransfers, tokensToTransfers } =
+        useTransferMappings(transfersWithRoyalty);
 
     // info we need
     // - % of royalties paid
