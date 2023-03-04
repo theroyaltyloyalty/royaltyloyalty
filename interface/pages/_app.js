@@ -1,21 +1,21 @@
-import * as React from 'react';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
     EthereumClient,
     modalConnectors,
-    walletConnectProvider,
+    walletConnectProvider
 } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
-import { WagmiConfig, configureChains, createClient } from 'wagmi';
-import { hardhat, polygonMumbai, goerli } from 'wagmi/chains';
+import * as React from 'react';
+import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { goerli, hardhat, polygonMumbai } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
-import { globalCSS } from '../styles/globalCSS';
+import { publicProvider } from 'wagmi/providers/public';
 import { Layout } from '../components';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import '../styles/global.css';
 import { polygonPocket } from '../shared/chains';
+import '../styles/global.css';
+import { globalCSS } from '../styles/globalCSS';
 
 const theme = extendTheme(globalCSS);
 
