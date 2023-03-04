@@ -13,6 +13,7 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 import { Layout } from '../components';
+import { MainContextProvider } from '../contexts/MainContext';
 import { polygonPocket } from '../shared/chains';
 import '../styles/global.css';
 import { globalCSS } from '../styles/globalCSS';
@@ -65,11 +66,13 @@ function App({ Component, pageProps }) {
         <>
             <ChakraProvider theme={theme}>
                 <WagmiConfig client={wagmiClient}>
-                    <QueryClientProvider client={queryClient}>
-                        <Layout>
-                            <Component {...pageProps} />
-                        </Layout>
-                    </QueryClientProvider>
+                    <MainContextProvider>
+                        <QueryClientProvider client={queryClient}>
+                            <Layout>
+                                <Component {...pageProps} />
+                            </Layout>
+                        </QueryClientProvider>
+                    </MainContextProvider>
                 </WagmiConfig>
                 <Web3Modal
                     projectId={projectId}

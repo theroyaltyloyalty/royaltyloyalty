@@ -1,20 +1,53 @@
+import { gql } from '@apollo/client';
 import {
     Button, Container, Heading, Menu, MenuButton, MenuItem, MenuList,
     Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr
 } from '@chakra-ui/react';
 import Head from 'next/head';
 import * as React from 'react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { BsChevronDown } from 'react-icons/bs';
 import { useAccount } from 'wagmi';
-import { useIsMounted } from '../hooks';
+import { MainContext } from '../contexts/MainContext';
+import { mutateFollowFee } from '../gqlQueries/mutateFollowFee';
+import { useApolloClient, useIsMounted, useToastErr } from '../hooks';
 import { dateFilter } from '../shared/constants';
 import { formatWallet } from '../shared/utils';
 
 function Home() {
     const isMounted = useIsMounted();
     const { isConnected } = useAccount();
+    const toastErr = useToastErr();
     const [dateFilterIndex, setDateFilterIndex] = useState(1);
+    const { profile } = useContext(MainContext);
+    const client = useApolloClient();
+    const { accessToken, profileId } = profile;
+
+    function setFollowFee() {
+        // TODO: frh -> if amount set display on table, also set currency option
+        const address = '0x577eBC5De943e35cdf9ECb5BbE1f7D7CB6c7C647';
+        // TODO: This is WMATIC, check if other tokens will work
+        const currency = '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889';
+        const value = 5;
+
+        if (accessToken && profileId) {
+            const _mutateFollowFee = gql`${mutateFollowFee(
+                profileId, currency, value, address
+            )}`;
+            client.mutate({
+                mutation: _mutateFollowFee,
+                context: {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                }
+            })
+                .then(res => {
+                    console.log('res: ', res);
+                })
+                .catch(err => toastErr(err));
+        }
+    }
 
     return (
         <div>
@@ -96,7 +129,7 @@ function Home() {
                                     <Th className='column-short'>Total royalties paid</Th>
                                     <Th className='column-short'>Nº Royalties Dodged</Th>
                                     <Th className='column-short'>Nº Royalties Paid</Th>
-                                    <Th className='column-short'>Social</Th>
+                                    {profileId && <Th className='column-short'>Social</Th>}
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -119,7 +152,7 @@ function Home() {
                                     <Td className='column-short'>
                                         7
                                     </Td>
-                                    <Td className='column-short'>
+                                    {profileId && <Td className='column-short'>
                                         <Text
                                             background='#BCFE65'
                                             color='#00501E'
@@ -134,11 +167,11 @@ function Home() {
                                         >
                                             Follows you
                                         </Text>
-                                    </Td>
+                                    </Td>}
                                 </Tr>
                                 <Tr>
                                     <Td className='column-short'>
-                                        {formatWallet('0x75336b7F786dF5647f6B20Dc36eAb9E27D704894')}
+                                        {formatWallet('0x577eBC5De943e35cdf9ECb5BbE1f7D7CB6c7C647')}
                                     </Td>
                                     <Td className='column-short'>
                                         15
@@ -155,16 +188,17 @@ function Home() {
                                     <Td className='column-short'>
                                         7
                                     </Td>
-                                    <Td className='column-short'>
+                                    {profileId && <Td className='column-short'>
                                         <Button
                                             width='fit-content'
                                             padding='8px 16px'
                                             fontWeight='bold'
                                             margin='0 auto'
+                                            onClick={() => setFollowFee()}
                                         >
                                             Set a follow fee
                                         </Button>
-                                    </Td>
+                                    </Td>}
                                 </Tr>
                             </Tbody>
                         </Table>
