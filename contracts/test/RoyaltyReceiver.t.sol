@@ -36,7 +36,7 @@ contract MockRouter {
             address(0),
             ''
         );
-        MockRoyaltyToken(royaltyToken).mockTransferEmitter(buyer, id);
+        MockRoyaltyToken(royaltyToken).transferFrom(msg.sender, buyer, id);
     }
 }
 
@@ -54,8 +54,10 @@ contract RoyaltyReceiverTest is Test {
     function setUp() public {
         router = new MockRouter();
         nft = new MockRoyaltyToken();
-        for (uint256 x = 1; x <= 20; x++) MockERC721(address(nft)).mint(x);
+        for (uint256 x = 1; x <= 20; x++)
+            MockERC721(address(nft)).mint(x, address(this));
         vm.deal(address(this), 1 ether);
+        nft.setApprovalForAll(address(router), true);
     }
 
     function testSendRoyalty() public {

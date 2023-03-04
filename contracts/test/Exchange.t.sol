@@ -26,7 +26,8 @@ contract RoyaltyExchangeTest is Test {
         vm.deal(address(this), 100 ether);
         nft = IERC721(address(new MockERC721()));
 
-        for (uint256 x = 1; x <= 20; x++) MockERC721(address(nft)).mint(x);
+        for (uint256 x = 1; x <= 20; x++)
+            MockERC721(address(nft)).mint(x, address(this));
 
         assertEq(nft.balanceOf(address(this)), 20);
     }
