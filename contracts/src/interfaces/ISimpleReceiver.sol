@@ -4,7 +4,7 @@ pragma solidity 0.8.15;
 import {IERC2981} from '../../lib/openzeppelin-contracts/contracts/interfaces/IERC2981.sol';
 
 interface ISimpleReceiver is IERC2981 {
-    event RoyaltyStatus(
+    event RoyaltyPayment(
         address indexed operator,
         address indexed payer,
         address indexed currency,
@@ -17,4 +17,9 @@ interface ISimpleReceiver is IERC2981 {
         address _currency,
         bytes calldata _data
     ) external payable returns (bytes4);
+
+    function royaltyCurrencyInfo(uint256 _tokenId)
+        external
+        view
+        returns (address);
 }

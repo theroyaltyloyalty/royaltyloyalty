@@ -15,15 +15,21 @@ import { globalCSS } from '../styles/globalCSS';
 import { Layout } from '../components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import '../styles/global.css';
+import { polygonPocket } from '../shared/chains';
 
 const theme = extendTheme(globalCSS);
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 const alchemyMumbaiKey = process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI_KEY;
 
-const chains = [polygonMumbai, goerli, hardhat];
+const chains = [polygonPocket, polygonMumbai, goerli, hardhat];
 
 const providers = [
+    jsonRpcProvider({
+        rpc: () => ({
+            http: 'https://poly-mainnet.gateway.pokt.network/v1/lb/101f27bb3d7017b30ecc17e1',
+        }),
+    }),
     alchemyProvider({ apiKey: alchemyMumbaiKey }),
     walletConnectProvider({ projectId }),
     publicProvider(),
@@ -38,7 +44,7 @@ const { provider, webSocketProvider } = configureChains(chains, providers);
 
 const wagmiClient = createClient({
     autoConnect: true,
-    connectors: modalConnectors({ appName: 'react-solidity-scaffold', chains }),
+    connectors: modalConnectors({ appName: 'royaltyloyalty', chains }),
     provider,
     webSocketProvider,
 });

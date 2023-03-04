@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "./TransferConstants.sol";
-import "./TransferHelper.sol";
-import "./Structs.sol";
-import "./Errors.sol";
+import './TransferConstants.sol';
+import './TransferHelper.sol';
+import './Structs.sol';
+import './Errors.sol';
 
-import {IERC721} from "forge-std/interfaces/IERC721.sol";
+import {IERC721} from 'forge-std/interfaces/IERC721.sol';
 
 contract Exchange is TransferHelper {
     event List(
@@ -59,17 +59,15 @@ contract Exchange is TransferHelper {
     function buy(
         address nft,
         uint256 id,
-        address receiver,
-        Payment[] calldata additionalPayments
+        address receiver
     ) public payable {
-        _buy(nft, id, receiver, additionalPayments);
+        _buy(nft, id, receiver);
     }
 
     function _buy(
         address nft,
         uint256 id,
-        address receiver,
-        Payment[] calldata additionalPayments
+        address receiver
     ) internal {
         Payment memory payment = listings[nft][id];
         // try to send the NFT to the buyer
@@ -77,11 +75,7 @@ contract Exchange is TransferHelper {
         if (_performERC721Transfer(nft, payment.to, receiver, id)) {
             // send ETH to the seller if the transfer did not fail
             // revert if ETH transfer fails
-            _transferEthAndFinalize(
-                payment.amount,
-                payment.to,
-                additionalPayments
-            );
+            _transferEthAndFinalize(payment.amount, payment.to);
             emit Sale(payment.to, msg.sender, nft, id, payment.amount);
         }
         delete listings[nft][id];

@@ -4,7 +4,7 @@ pragma solidity 0.8.15;
 import {IERC2981} from '../../lib/openzeppelin-contracts/contracts/interfaces/IERC2981.sol';
 
 interface IRoyaltyReceiver is IERC2981 {
-    event RoyaltyStatus(
+    event RoyaltyPayment(
         address indexed operator,
         address indexed royaltyPayer,
         uint256 expectedAmount,
