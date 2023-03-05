@@ -1,6 +1,5 @@
-import { Web3Button } from '@web3modal/react';
 import { Container } from '@chakra-ui/react';
-import { useWeb3ModalTheme } from '@web3modal/react';
+import { useWeb3ModalTheme, Web3Button } from '@web3modal/react';
 
 export function Connect() {
     const { theme, setTheme } = useWeb3ModalTheme();
@@ -14,9 +13,9 @@ export function Connect() {
         themeColor: 'orange',
         themeBackground: 'gradient',
     });
-    
+
     return (
-        <Container width='100%' textAlign='right'>
+        <Container width='100%' textAlign='right' padding='0'>
             <Web3Button />
         </Container>
     );
