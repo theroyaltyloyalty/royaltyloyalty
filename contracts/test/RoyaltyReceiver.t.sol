@@ -8,6 +8,10 @@ import {MockERC721, ERC721} from 'test/mocks/MockTokens.sol';
 contract MockRoyaltyToken is MockERC721, RoyaltyReceiver {
     address seller = address(42);
 
+    constructor() {
+        _setDefaultRoyalty(address(this), 500, address(0));
+    }
+
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -30,7 +34,11 @@ contract MockRouter {
         uint256 price,
         address buyer
     ) public payable {
-        RoyaltyReceiver(royaltyToken).onRoyaltyReceived{value: msg.value}(
+        (, uint256 royalty) = MockRoyaltyToken(royaltyToken).royaltyInfo(
+            id,
+            price
+        );
+        RoyaltyReceiver(royaltyToken).onRoyaltyReceived{value: royalty}(
             id,
             buyer,
             address(0),
@@ -57,8 +65,15 @@ contract RoyaltyReceiverTest is Test {
         nft = new MockRoyaltyToken();
         for (uint256 x = 1; x <= 20; x++)
             MockERC721(address(nft)).mint(x, address(this));
-        vm.deal(address(this), 1 ether);
+        vm.deal(address(this), 1.05 ether);
         nft.setApprovalForAll(address(router), true);
+    }
+
+    function testRoyalty() public {
+        (address receiver, uint256 amount) = nft.royaltyInfo(0, 10000);
+
+        assertEq(address(nft), receiver);
+        assertEq(500, amount);
     }
 
     function testSendRoyalty() public {
@@ -68,16 +83,16 @@ contract RoyaltyReceiverTest is Test {
             address(this),
             address(0),
             1,
-            0.1 ether
+            0.05 ether
         );
         emit Transfer(address(42), address(this), 1);
-        router.mockRoyaltyPayment{value: 0.1 ether}(
+        router.mockRoyaltyPayment{value: 1.05 ether}(
             address(nft),
             1,
-            100 ether,
+            1 ether,
             address(this)
         );
-        assertEq(address(nft).balance, 0.1 ether);
+        assertEq(address(nft).balance, 0.05 ether);
     }
 
     receive() external payable {}
