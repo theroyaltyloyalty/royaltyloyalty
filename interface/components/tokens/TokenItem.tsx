@@ -21,17 +21,17 @@ export default function TokenItem({
 
     return (
         <tr key={token.tokenId} className="text-right h-12">
-            <td className="min-w-[20px]">
-                <div className="flex items-center select-none">
+            <td className="text-left">
+                <div className="flex items-center select-none space-x-4">
                     <img
                         src={token.metadata?.image}
                         alt={token.metadata?.name || ''}
                         width={32}
                         height={32}
                     />
+                    <div>#{parseInt(token.tokenId) + 1}</div>
                 </div>
             </td>
-            <td className="text-left">#{parseInt(token.tokenId) + 1}</td>
             <td className="text-left">{shortenAddress(owner)}</td>
             <td>{stats.royaltiesPaid}</td>
             <td>{stats.royaltiesDodged}</td>

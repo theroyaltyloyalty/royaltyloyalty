@@ -27,6 +27,7 @@ import { convertToEth } from 'utils/currency';
 import { generateMerkleTree } from 'utils/merkleTree';
 import { MainContext } from '../../contexts/MainContext';
 import { downloadCSV } from 'utils/csv';
+import Avatar from 'components/Avatar';
 
 export enum PageTab {
     Owners = 'Owners',
@@ -90,11 +91,21 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
         <div className="py-12">
             <div className="container-content space-y-10">
                 <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="font-bold text-4xl">
-                            {collection.name}
-                        </h1>
-                        <p>{shortenAddress(collection.contract)}</p>
+                    <div className="flex items-center space-x-4">
+                        <Avatar
+                            name={collection.contract}
+                            size={64}
+                            className="rounded-md"
+                            square={true}
+                        />
+                        <div>
+                            <h1 className="font-bold text-4xl mb-1">
+                                {collection.name}
+                            </h1>
+                            <p className="text-sm text-gray-200">
+                                {shortenAddress(collection.contract)}
+                            </p>
+                        </div>
                     </div>
                     <Actions
                         collection={collection}
@@ -159,10 +170,10 @@ const Tabs = ({
             {tabs.map((tab) => (
                 <div
                     key={tab.value}
-                    className={`cursor-pointer ${
+                    className={`cursor-pointer border text-sm font-bold  px-3 py-2 ${
                         activeTab === tab.value
-                            ? 'text-primary-500'
-                            : 'text-gray-500 hover:text-primary-500'
+                            ? 'text-black border-white bg-white'
+                            : 'text-white border-gray-600'
                     }`}
                     onClick={() => setActiveTab(tab.value)}
                 >
