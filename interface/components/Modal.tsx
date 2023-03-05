@@ -123,7 +123,7 @@ function CloseButton(props: Partial<ModalProps>) {
     return (
         <div className="relative">
             <div className="absolute top-0 right-0 z-40" onClick={onClose}>
-                <button onClick={onClose}>
+                <button onClick={onClose} className="border-none outline-none">
                     <IconClose className="h-4 w-4" />
                 </button>
             </div>
