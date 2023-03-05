@@ -3,7 +3,7 @@
 Royalty Loyalty is our submission for the 2023 ETH Denver BUIDLathon. The project includes:
 - Several implementations of our proposal for a new royalty interface
 - An NFT exchange that implements our proposed interface
-- Deployments of the above through a CREATE3 Factory on 5 different EVM test networks
+- Deployments of the above through a CREATE3 Factory on 6 different EVM test networks
 - A Graph subgraph that can index the events of the interface
 - A web app that leverages all of the above, the Infura NFT API, and Lens, to aggregate and respond to data about royalty payments.
 
