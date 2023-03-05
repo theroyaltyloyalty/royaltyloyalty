@@ -2,13 +2,18 @@
 pragma solidity ^0.8.13;
 
 import {ERC20} from 'solmate/tokens/ERC20.sol';
-import {ERC721} from 'solmate/tokens/ERC721.sol';
+// import {ERC721} from 'solmate/tokens/ERC721.sol';
+import {ERC721} from 'openzeppelin-contracts/contracts/token/ERC721/ERC721.sol';
+import {Strings} from 'openzeppelin-contracts/contracts/utils/Strings.sol';
 import {ERC1155} from 'solmate/tokens/ERC1155.sol';
 import {SVGUtil} from '../../src/tokens/utils/SVGUtil.sol';
 
 contract MockERC20 is ERC20('', '', 18) {}
 
-contract MockERC721 is ERC721('', ''), SVGUtil {
+contract MockERC721 is ERC721('RLTY', 'LTY'), SVGUtil {
+    using Strings for uint256;
+    string public baseURI;
+
     function tokenURI(uint256 id) public pure override returns (string memory) {
         return _uri(id, keccak256(abi.encodePacked(id)), 'R', 'L');
     }
