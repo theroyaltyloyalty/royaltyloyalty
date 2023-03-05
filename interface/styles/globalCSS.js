@@ -71,7 +71,7 @@ export const globalCSS = {
                 fontWeight: 'bold',
             },
             textarea: {
-                border: 'none !important',
+                border: '1px solid white !important',
                 overflow: 'auto !important',
                 outline: 'none !important',
                 boxShadow: 'none !important',

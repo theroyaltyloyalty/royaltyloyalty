@@ -1,6 +1,7 @@
-import { Container, Textarea } from '@chakra-ui/react';
+import { Container, Text, Textarea } from '@chakra-ui/react';
 import { LensEnvironment, LensGatedSDK } from '@lens-protocol/sdk-gated';
 import axios from 'axios';
+import Avatar from 'boring-avatars';
 import { ethers } from 'ethers';
 import { useContext, useState } from 'react';
 import { v4 as uuid } from 'uuid';
@@ -10,26 +11,20 @@ import { useApolloClient, useToastErr } from '../hooks';
 import { getSigner, lensHub, signCreatePostTypedData, splitSignature } from '../lens-api';
 
 export function CreatePublication({ selectedOwners, setIsOpen }) {
+    const addresses = selectedOwners.map(item => {
+        const { address } = item;
+        return {
+            eoa: {
+                address
+            }
+        };
+    });
     const toastErr = useToastErr();
     const client = useApolloClient();
     const { profile } = useContext(MainContext);
     const { accessToken, handle, profileId } = profile;
     const { address } = useAccount();
     const [postData, setPostData] = useState('');
-
-
-    const addresses = [
-        {
-            eoa: {
-                address: '0x75336b7F786dF5647f6B20Dc36eAb9E27D704894'
-            }
-        },
-        {
-            eoa: {
-                address: '0xdb46d1dc155634fbc732f92e853b10b288ad5a1d'
-            }
-        },
-    ];
 
     let accessCondition = { and: { criteria: addresses } };
 
@@ -137,23 +132,62 @@ export function CreatePublication({ selectedOwners, setIsOpen }) {
                 address && accessToken && (<Container
                     display='flex'
                     flexDirection='column'
-                    alignItems='flex-end'
+                    maxWidth='100%'
+                    margin='0'
+                    padding='0 16px'
                 >
                     <Textarea
                         onChange={onChange}
                         placeholder='Share the word!'
+                        height='160px'
                         margin='32px 0'
                     />
-                    <button
-                        onClick={createPost}
-                        style={{
-                            width: 'fit-content'
-                        }}
+                    <Container
+                        display='flex'
+                        maxWidth='100%'
+                        margin='0'
+                        padding='0'
+                        justifyContent='space-between'
                     >
-                        Post
-                    </button>
-                </Container>)
+                        <Container
+                            fontSize='11px'
+                            color='#b3b3b3'
+                            overflowY='scroll'
+                            height='160px'
+                            margin='0'
+                            padding='0'
+                        >
+                            <Text
+                                fontSize='16px'
+                                fontWeight='bold'
+                                color='white'
+                                position='fixed'
+                                background='black'
+                                width='400px'
+                                padding='16px 0'
+                            >
+                                Selected addresses
+                            </Text>
+                            {addresses.map((item, key) => {
+                                const { address } = item.eoa;
+                                return (
+                                    <div key={key} className='flex items-center space-x-4' style={{ margin: '8px', width: '400px' }}>
+                                        <Avatar name={address} size={16} variant='marble' />
+                                        <div>{address}</div>
+                                    </div>);
+                            })}
+                        </Container>
+                        <button
+                            onClick={createPost}
+                            style={{
+                                height: 'fit-content'
+                            }}
+                        >
+                            Post
+                        </button>
+                    </Container>
+                </Container >)
             }
-        </div>
+        </div >
     );
 }
