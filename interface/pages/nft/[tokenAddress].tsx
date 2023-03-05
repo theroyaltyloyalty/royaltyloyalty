@@ -13,20 +13,17 @@ import useTransfers from 'hooks/useTransfers';
 import useTransfersWithRoyalties from 'hooks/useTransfersWithRoyalties';
 import type { GetServerSideProps, NextPage } from 'next';
 import {
-    useContext,
-    useCallback,
-    useState,
     Dispatch,
-    SetStateAction,
+    SetStateAction, useCallback, useContext, useState
 } from 'react';
 import infuraClient from 'services/infuraClient';
 import { Asset, Collection } from 'types/infuraTypes';
 import { OwnerData, OwnerExtended, Royalty, RoyaltyData } from 'types/types';
 import { shortenAddress } from 'utils/address';
+import { downloadCSV } from 'utils/csv';
 import { convertToEth } from 'utils/currency';
 import { generateMerkleTree } from 'utils/merkleTree';
 import { MainContext } from '../../contexts/MainContext';
-import { downloadCSV } from 'utils/csv';
 
 export enum PageTab {
     Owners = 'Owners',
@@ -41,7 +38,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     const { data: tokens } = useTokens(collection.contract);
     const { data: ownersData } = useOwners(collection.contract);
     const { data: transfers } = useTransfers(collection.contract);
-    const { data: royaltyData } = useRoyalties(collection.contract);
+    const { data: royaltyData } = useRoyalties();
     const { data: royalty } = useCollectionRoyalty(collection.contract);
 
     const { owners, ownerByTokenId } = ownersData || {};
