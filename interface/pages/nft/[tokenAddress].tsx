@@ -26,6 +26,7 @@ import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
 import { generateMerkleTree } from 'utils/merkleTree';
 import { MainContext } from '../../contexts/MainContext';
+import { downloadCSV } from 'utils/csv';
 
 export enum PageTab {
     Owners = 'Owners',
@@ -96,6 +97,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         <p>{shortenAddress(collection.contract)}</p>
                     </div>
                     <Actions
+                        collection={collection}
                         selectedOwners={selectedOwners}
                         setIsWhitelistModalOpen={setIsWhitelistModalOpen}
                         setMerkleRoot={setMerkleRoot}
@@ -214,11 +216,13 @@ const Stats = ({
 };
 
 const Actions = ({
+    collection,
     selectedOwners,
     setMerkleRoot,
     setIsWhitelistModalOpen,
 }: {
-    selectedOwners: OwnerData[];
+    collection: Collection;
+    selectedOwners: OwnerExtended[];
     setMerkleRoot: Dispatch<SetStateAction<string | null>>;
     setIsWhitelistModalOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
@@ -232,6 +236,20 @@ const Actions = ({
         setIsWhitelistModalOpen(true);
     }, [selectedOwners, setIsWhitelistModalOpen, setMerkleRoot]);
 
+    const handleDownloadOwners = useCallback(() => {
+        if (!selectedOwners?.length) {
+            return;
+        }
+
+        const ownersInput = selectedOwners.map((owner) => {
+            const newOwner = { ...owner };
+            delete newOwner.tokens;
+            return newOwner;
+        });
+
+        downloadCSV(ownersInput, `collectors-${collection.name}`);
+    }, [collection.name, selectedOwners]);
+
     return (
         <div className="flex items-center space-x-4">
             <button
@@ -240,7 +258,12 @@ const Actions = ({
             >
                 Create whitelist
             </button>
-            <button>Download owners</button>
+            <button
+                disabled={!selectedOwners?.length}
+                onClick={handleDownloadOwners}
+            >
+                Download owners
+            </button>
         </div>
     );
 };
