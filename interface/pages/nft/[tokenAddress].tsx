@@ -11,8 +11,7 @@ import useTransfersWithRoyalties from 'hooks/useTransfersWithRoyalties';
 import type { GetServerSideProps, NextPage } from 'next';
 import {
     useContext,
-    useEffect,
-    useMemo,
+    useCallback,
     useState,
     Dispatch,
     SetStateAction,
@@ -62,14 +61,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     const [activeTab, setActiveTab] = useState(PageTab.Owners);
     const [isWhitelistModalOpen, setIsWhitelistModalOpen] = useState(false);
     const [selectedOwners, setSelectedOwners] = useState<OwnerExtended[]>([]);
-
-    // EFFECTS
-    // Reset selected owners when tab changes
-    useEffect(() => {
-        if (activeTab !== PageTab.Owners && selectedOwners.length > 0) {
-            setSelectedOwners([]);
-        }
-    }, [activeTab, selectedOwners]);
+    const [merkleRoot, setMerkleRoot] = useState<string | null>(null);
 
     // TABS
     const tabToComponent: {
@@ -103,8 +95,9 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         <p>{shortenAddress(collection.contract)}</p>
                     </div>
                     <Actions
-                        owners={owners}
+                        selectedOwners={selectedOwners}
                         setIsWhitelistModalOpen={setIsWhitelistModalOpen}
+                        setMerkleRoot={setMerkleRoot}
                     />
                 </div>
                 {profile?.profileId && <CreatePublication />}
@@ -123,6 +116,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                 isOpen={isWhitelistModalOpen}
                 setIsOpen={setIsWhitelistModalOpen}
                 selectedOwners={selectedOwners}
+                merkleRoot={merkleRoot}
             />
         </div>
     );
@@ -178,7 +172,7 @@ const Stats = ({
 }) => {
     const generalStats = [
         {
-            label: 'Unique Owners',
+            label: 'Collectors',
             value: owners?.length || 0,
         },
         {
@@ -208,25 +202,29 @@ const Stats = ({
 };
 
 const Actions = ({
-    owners,
+    selectedOwners,
+    setMerkleRoot,
     setIsWhitelistModalOpen,
 }: {
-    owners: OwnerData[];
+    selectedOwners: OwnerData[];
+    setMerkleRoot: Dispatch<SetStateAction<string | null>>;
     setIsWhitelistModalOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-    const ownerAddresses = useMemo(
-        () => owners?.map((owner) => owner.address),
-        [owners]
-    );
+    const handleMerkleTreeClick = useCallback(() => {
+        if (!selectedOwners?.length) {
+            return;
+        }
+        const addresses = selectedOwners.map((owner) => owner.address);
+        const merkleTree = generateMerkleTree(addresses);
+        setMerkleRoot(merkleTree.root);
+        setIsWhitelistModalOpen(true);
+    }, [selectedOwners, setIsWhitelistModalOpen, setMerkleRoot]);
 
     return (
         <div className="flex items-center space-x-4">
             <button
-                onClick={() => {
-                    generateMerkleTree(ownerAddresses);
-                    setIsWhitelistModalOpen(true);
-                }}
-                disabled={!owners?.length}
+                onClick={handleMerkleTreeClick}
+                disabled={!selectedOwners?.length}
             >
                 Create whitelist
             </button>

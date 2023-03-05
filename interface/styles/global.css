@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    html,
+    body {
+        @apply h-full w-full;
+        @apply bg-black text-white selection:bg-white selection:text-black;
+    }
+}
+
 @layer components {
     .container-content {
         @apply mx-auto w-[92%] max-w-[1000px];
