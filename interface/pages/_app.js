@@ -12,7 +12,6 @@ import { polygonPocket } from '../shared/chains';
 import '../styles/global.css';
 import { globalCSS } from '../styles/globalCSS';
 import { INFURA_API_KEY, WALLET_CONNECT_PROJECT_ID } from '../config';
-
 const theme = extendTheme(globalCSS);
 
 const chains = [polygonMumbai, polygonPocket];

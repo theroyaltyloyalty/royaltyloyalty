@@ -182,7 +182,7 @@ const Tabs = ({
             {tabs.map((tab) => (
                 <div
                     key={tab.value}
-                    className={`cursor-pointer border text-sm font-bold  px-3 py-2 ${
+                    className={`cursor-pointer rounded-md border text-sm font-bold  px-3 py-2 ${
                         activeTab === tab.value
                             ? 'text-black border-white bg-white'
                             : 'text-white border-gray-600'
@@ -278,14 +278,14 @@ const Actions = ({
     return (
         <div className="flex items-center space-x-4 text-sm font-bold">
             <button
-                className="py-2"
+                className="py-2 rounded-lg"
                 onClick={handleMerkleTreeClick}
                 disabled={!selectedOwners?.length}
             >
                 Create whitelist
             </button>
             <button
-                className="py-2"
+                className="py-2 rounded-lg"
                 disabled={!selectedOwners?.length}
                 onClick={handleDownloadOwners}
             >

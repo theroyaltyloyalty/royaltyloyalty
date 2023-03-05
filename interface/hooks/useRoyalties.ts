@@ -2,7 +2,8 @@ import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import { useQuery } from '@tanstack/react-query';
 import { BigNumber } from 'ethers';
 
-const royaltyEvents = gql`${`
+const royaltyEvents = gql`
+    ${`
     query RoyaltyEvents {
             royaltyEvents{
                 royaltyAmount
@@ -14,13 +15,13 @@ const royaltyEvents = gql`${`
                 payer
             }
     }
-`}`;
+`}
+`;
 
 export default function useRoyalties() {
-
     const client = new ApolloClient({
         uri: 'https://api.thegraph.com/subgraphs/name/stevennevins/royaltyloyalty',
-        cache: new InMemoryCache()
+        cache: new InMemoryCache(),
     });
 
     return useQuery({
@@ -36,15 +37,16 @@ export default function useRoyalties() {
                 totalPaid = BigNumber.from(event.royaltyAmount)
                     .add(totalPaid)
                     .toString();
+
                 return {
                     ...event,
                     amount: event.royaltyAmount,
                     currency: event.royaltyCurrency,
-                    transactionHash: event.id
+                    transactionHash: event.id,
                 };
             });
 
-            return { totalPaid, royaltyPayments, };
+            return { totalPaid, royaltyPayments };
         },
     });
 }

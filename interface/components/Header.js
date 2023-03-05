@@ -17,7 +17,7 @@ export function Header() {
                         <Text color="#C94E12">Loyalty</Text>
                     </div>
                 </Link>
-                <nav className="flex items-center">
+                <nav className="flex items-center space-x-4">
                     {isConnected && <ConnectLens />}
                     <Connect />
                 </nav>

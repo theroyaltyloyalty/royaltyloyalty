@@ -16,6 +16,9 @@ module.exports = {
                     600: '#2f3136',
                 },
             },
+            rounded: {
+                lg: '10px',
+            },
         },
     },
     plugins: [],
