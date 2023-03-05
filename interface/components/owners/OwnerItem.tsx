@@ -1,7 +1,7 @@
 import { OwnerExtended } from 'types/types';
 import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
-import Avatar from 'boring-avatars';
+import Avatar from 'components/Avatar';
 import { getLoyalty } from 'utils/loyalty';
 import Checkbox from 'components/Checkbox';
 
@@ -30,18 +30,23 @@ export default function OwnerItem({
             </td>
             <td>
                 <div className="flex items-center space-x-4">
-                    <Avatar name={owner.address} size={32} variant="marble" />
+                    <Avatar
+                        name={owner.address}
+                        size={32}
+                        square={false}
+                        className="rounded-full"
+                    />
                     <div>{shortenAddress(owner.address)}</div>
                 </div>
             </td>
             <td>
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center select-none">
                     <div className="px-3 py-1 rounded-sm bg-white/5">{`${loyalty?.emoji} ${loyalty?.label}`}</div>
                 </div>
             </td>
             {showFollowing && (
                 <td>
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center select-none">
                         {owner.isFollower ? (
                             <div className="px-3 py-1 rounded-sm bg-white/5">
                                 🌿 Follower

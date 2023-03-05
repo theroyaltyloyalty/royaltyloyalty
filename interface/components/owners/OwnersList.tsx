@@ -73,7 +73,7 @@ export default function OwnersList({
     return (
         <table className="w-full table-auto ">
             <thead className="text-right">
-                <tr className="h-12 uppercase text-xs">
+                <tr className="h-12 uppercase text-xs border-b border-b-gray-600">
                     <th className="pr-4">
                         <div className="flex items-center justify-center">
                             <Checkbox
