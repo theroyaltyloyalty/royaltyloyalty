@@ -36,3 +36,17 @@ export interface RoyaltyStats {
     royaltiesAmountPaid: string;
     percentagePaid: number;
 }
+
+export enum LoyaltyLevel {
+    TierOne,
+    TierTwo,
+    TierThree,
+    TierFour,
+    TierFive,
+    TierSix,
+}
+
+export interface OwnerExtended extends OwnerData, RoyaltyStats {
+    loyaltyLevel: LoyaltyLevel;
+    isFollower: boolean;
+}

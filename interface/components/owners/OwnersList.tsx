@@ -1,36 +1,38 @@
-import { OwnerData, TransferWithRoyalty } from 'types/types';
+import { OwnerExtended } from 'types/types';
 import OwnerItem from './OwnerItem';
+import { useContext, useMemo } from 'react';
+import { MainContext } from '../../contexts/MainContext';
 
 export default function OwnersList({
     owners,
-    ownersToTransfers,
-    transfers,
 }: {
-    owners: OwnerData[];
-    ownersToTransfers: Record<string, number[]>;
-    transfers: TransferWithRoyalty[];
+    owners: OwnerExtended[];
 }): JSX.Element {
+    const { profile } = useContext(MainContext);
+    const showFollowing = useMemo(() => Boolean(profile.profileId), [profile]);
+
     return (
-        <table className="w-full table-auto text-sm">
+        <table className="w-full table-auto ">
             <thead className="text-right">
-                <tr>
-                    <th></th>
-                    <th className="text-left">Address</th>
+                <tr className="h-12 uppercase text-xs">
+                    <th className="text-left">Collector</th>
+                    <th className="text-center">Loyalty</th>
+                    {profile.profileId && (
+                        <th className="text-center">Following</th>
+                    )}
                     <th>Balance</th>
                     <th>Royalties Paid</th>
                     <th>Royalties Dodged</th>
                     <th>% Royalties Paid</th>
-                    <th>Royalties Amount Paid</th>
-                    <th>Social</th>
+                    <th>Amount Paid</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody className="text-sm">
                 {owners?.map((owner) => (
                     <OwnerItem
                         key={owner.address}
                         owner={owner}
-                        ownerTransfers={ownersToTransfers[owner.address]}
-                        transfers={transfers}
+                        showFollowing={showFollowing}
                     />
                 ))}
             </tbody>
