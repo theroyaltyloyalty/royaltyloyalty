@@ -3,18 +3,31 @@ import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
 import Avatar from 'boring-avatars';
 import { getLoyalty } from 'utils/loyalty';
+import Checkbox from 'components/Checkbox';
 
 export default function OwnerItem({
     owner,
     showFollowing,
+    isSelected,
+    onCheckboxChange,
 }: {
     owner: OwnerExtended;
     showFollowing: boolean;
+    isSelected: boolean;
+    onCheckboxChange: () => void;
 }): JSX.Element {
     const loyalty = getLoyalty(owner.percentagePaid);
 
     return (
         <tr key={owner.address} className="text-right h-12">
+            <td className="pr-4">
+                <div className="flex items-center justify-center">
+                    <Checkbox
+                        checked={isSelected}
+                        onChange={onCheckboxChange}
+                    />
+                </div>
+            </td>
             <td>
                 <div className="flex items-center space-x-4">
                     <Avatar name={owner.address} size={32} variant="marble" />
