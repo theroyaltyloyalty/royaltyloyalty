@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
     EthereumClient,
     modalConnectors,
-    walletConnectProvider
+    walletConnectProvider,
 } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
 import { WagmiConfig, configureChains, createClient } from 'wagmi';
