@@ -26,3 +26,4 @@ Deployed at 0x7f7f488AA05d5cbf7866Df916705DB67fD0138Fd on:
 | Optimism Goerli                                                       | [0x7f7f488aa05d5cbf7866df916705db67fd0138fd](https://etherscan.io/address/0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63) |
 | Arbitrum Goerli                                                       | [0x7f7f488aa05d5cbf7866df916705db67fd0138fd](https://etherscan.io/address/0x7f7f488aa05d5cbf7866df916705db67fd0138fd) |
 | Mumbai                                                                | [0x7f7f488aa05d5cbf7866df916705db67fd0138fd](https://etherscan.io/address/0x7f7f488aa05d5cbf7866df916705db67fd0138fd) |
+| Mantle                                                                | [0x7f7f488aa05d5cbf7866df916705db67fd0138fd](https://explorer.testnet.mantle.xyz/address/0x7f7f488AA05d5cbf7866Df916705DB67fD0138Fd/contracts#address-tabs) |
