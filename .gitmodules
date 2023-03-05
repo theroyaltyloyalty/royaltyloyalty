@@ -11,3 +11,6 @@
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
 [submodule "lib/openzeppelin-contracts"]
 	branch = v4.8.1
+[submodule "contracts/lib/create3-factory"]
+	path = contracts/lib/create3-factory
+	url = https://github.com/ZeframLou/create3-factory

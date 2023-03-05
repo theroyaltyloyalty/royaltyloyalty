@@ -21,10 +21,6 @@ contract MockRoyaltyToken is MockERC721, RoyaltyReceiver {
     {
         return super.supportsInterface(interfaceId);
     }
-
-    function mockTransferEmitter(address buyer, uint256 id) public {
-        emit Transfer(seller, buyer, id);
-    }
 }
 
 contract MockRouter {
