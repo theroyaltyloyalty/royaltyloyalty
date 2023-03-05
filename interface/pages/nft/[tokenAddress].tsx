@@ -9,7 +9,14 @@ import useTransferMappings from 'hooks/useTransferMappings';
 import useTransfers from 'hooks/useTransfers';
 import useTransfersWithRoyalties from 'hooks/useTransfersWithRoyalties';
 import type { GetServerSideProps, NextPage } from 'next';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import {
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+    Dispatch,
+    SetStateAction,
+} from 'react';
 import infuraClient from 'services/infuraClient';
 import { Asset, Collection } from 'types/infuraTypes';
 import { OwnerData, OwnerExtended, Royalty, RoyaltyData } from 'types/types';
@@ -19,6 +26,7 @@ import { CreatePublication } from '../../components';
 import { MainContext } from '../../contexts/MainContext';
 import { generateMerkleTree } from 'utils/merkleTree';
 import useOwnersExtended from 'hooks/useOwnersExtended';
+import WhitelistModal from 'components/modals/WhitelistModal';
 
 export enum PageTab {
     Owners = 'Owners',
@@ -53,6 +61,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     // STATE
     const [activeTab, setActiveTab] = useState(PageTab.Owners);
     const [selectedOwners, setSelectedOwners] = useState<OwnerExtended[]>([]);
+    const [isWhitelistModalOpen, setIsWhitelistModalOpen] = useState(false);
 
     // EFFECTS
     // Reset selected owners when tab changes
@@ -87,7 +96,10 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         </h1>
                         <p>{shortenAddress(collection.contract)}</p>
                     </div>
-                    <Actions owners={owners} />
+                    <Actions
+                        owners={owners}
+                        setIsWhitelistModalOpen={setIsWhitelistModalOpen}
+                    />
                 </div>
                 {profile?.profileId && <CreatePublication />}
                 <Stats
@@ -101,6 +113,10 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                     {tabToComponent[activeTab]}
                 </div>
             </div>
+            <WhitelistModal
+                isOpen={isWhitelistModalOpen}
+                setIsOpen={setIsWhitelistModalOpen}
+            />
         </div>
     );
 };
@@ -184,7 +200,13 @@ const Stats = ({
     );
 };
 
-const Actions = ({ owners }: { owners: OwnerData[] }) => {
+const Actions = ({
+    owners,
+    setIsWhitelistModalOpen,
+}: {
+    owners: OwnerData[];
+    setIsWhitelistModalOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
     const ownerAddresses = useMemo(
         () => owners?.map((owner) => owner.address),
         [owners]
@@ -193,7 +215,10 @@ const Actions = ({ owners }: { owners: OwnerData[] }) => {
     return (
         <div className="flex items-center space-x-4">
             <button
-                onClick={() => generateMerkleTree(ownerAddresses)}
+                onClick={() => {
+                    generateMerkleTree(ownerAddresses);
+                    setIsWhitelistModalOpen(true);
+                }}
                 disabled={!owners?.length}
             >
                 Create whitelist
