@@ -33,9 +33,12 @@ export function handleTransfer(event: Transfer): void {
 export function handleRoyalty(event: RoyaltyPayment): void {
     const royaltyEvent = new RoyaltyEvent(event.transaction.hash.toHexString());
 
+    royaltyEvent.tokenId = event.params.id;
+    royaltyEvent.operator = event.params.operator.toHexString();
+    royaltyEvent.payer = event.params.payer.toHexString();
+    royaltyEvent.royaltyCurrency = event.params.currency.toHexString();
     royaltyEvent.royaltyCurrency = event.params.currency.toHexString();
     royaltyEvent.royaltyAmount = event.params.amount;
-    royaltyEvent.tokenId = event.params.id;
     royaltyEvent.blockNumber = event.block.number;
     royaltyEvent.save();
 
