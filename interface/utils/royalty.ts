@@ -1,7 +1,7 @@
 import { TransferWithRoyalty, RoyaltyStats } from 'types/types';
 import { BigNumber } from 'ethers';
 
-export default function useOwnerRoyaltyStats(
+export function getOwnerRoyaltyStats(
     ownerTransfers?: number[],
     transfers?: TransferWithRoyalty[]
 ) {

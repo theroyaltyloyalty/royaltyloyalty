@@ -9,14 +9,16 @@ import useTransferMappings from 'hooks/useTransferMappings';
 import useTransfers from 'hooks/useTransfers';
 import useTransfersWithRoyalties from 'hooks/useTransfersWithRoyalties';
 import type { GetServerSideProps, NextPage } from 'next';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import infuraClient from 'services/infuraClient';
 import { Asset, Collection } from 'types/infuraTypes';
-import { OwnerData, Royalty, RoyaltyData } from 'types/types';
+import { OwnerData, OwnerExtended, Royalty, RoyaltyData } from 'types/types';
 import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
 import { CreatePublication } from '../../components';
 import { MainContext } from '../../contexts/MainContext';
+import { generateMerkleTree } from 'utils/merkleTree';
+import useOwnersExtended from 'hooks/useOwnersExtended';
 
 export enum PageTab {
     Owners = 'Owners',
@@ -24,9 +26,10 @@ export enum PageTab {
 }
 
 const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
-    const [activeTab, setActiveTab] = useState(PageTab.Owners);
+    // CONTEXT
     const { profile } = useContext(MainContext);
-    const { profileId } = profile;
+
+    // FETCH DATA
     const { data: tokens } = useTokens(collection.contract);
     const { data: ownersData } = useOwners(collection.contract);
     const { data: transfers } = useTransfers(collection.contract);
@@ -41,16 +44,29 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     const { ownersToTransfers, tokensToTransfers } =
         useTransferMappings(transfersWithRoyalty);
 
+    const ownersExtended = useOwnersExtended(
+        owners,
+        ownersToTransfers,
+        transfersWithRoyalty
+    );
+
+    // STATE
+    const [activeTab, setActiveTab] = useState(PageTab.Owners);
+    const [selectedOwners, setSelectedOwners] = useState<OwnerExtended[]>([]);
+
+    // EFFECTS
+    // Reset selected owners when tab changes
+    useEffect(() => {
+        if (activeTab !== PageTab.Owners && selectedOwners.length > 0) {
+            setSelectedOwners([]);
+        }
+    }, [activeTab, selectedOwners.length]);
+
+    // TABS
     const tabToComponent: {
         [key in PageTab]: JSX.Element;
     } = {
-        [PageTab.Owners]: (
-            <OwnersList
-                owners={owners}
-                ownersToTransfers={ownersToTransfers}
-                transfers={transfersWithRoyalty}
-            />
-        ),
+        [PageTab.Owners]: <OwnersList owners={ownersExtended} />,
         [PageTab.Tokens]: (
             <TokensList
                 tokens={tokens}
@@ -64,11 +80,16 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     return (
         <div className="py-12">
             <div className="container-content space-y-10">
-                <div>
-                    <h1 className="font-bold text-4xl">{collection.name}</h1>
-                    <p>{shortenAddress(collection.contract)}</p>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="font-bold text-4xl">
+                            {collection.name}
+                        </h1>
+                        <p>{shortenAddress(collection.contract)}</p>
+                    </div>
+                    <Actions owners={owners} />
                 </div>
-                {profileId && <CreatePublication/>}
+                {profile?.profileId && <CreatePublication />}
                 <Stats
                     owners={owners}
                     tokens={tokens}
@@ -93,7 +114,7 @@ const Tabs = ({
 }) => {
     const tabs = [
         {
-            label: 'Owners',
+            label: 'Collectors',
             value: PageTab.Owners,
         },
         {
@@ -142,7 +163,7 @@ const Stats = ({
             value: tokens?.length || 0,
         },
         {
-            label: 'Royalties',
+            label: 'Royalty',
             value: `${royalty?.percent || 0}%`,
         },
         {
@@ -152,13 +173,32 @@ const Stats = ({
     ];
 
     return (
-        <div className="flex items-center space-x-8">
+        <div className="flex items-center space-x-10">
             {generalStats.map((stat) => (
                 <div key={stat.label}>
-                    <p>{stat.label}</p>
+                    <p className="text-xs uppercase">{stat.label}</p>
                     <p className="font-bold text-2xl">{stat.value}</p>
                 </div>
             ))}
+        </div>
+    );
+};
+
+const Actions = ({ owners }: { owners: OwnerData[] }) => {
+    const ownerAddresses = useMemo(
+        () => owners?.map((owner) => owner.address),
+        [owners]
+    );
+
+    return (
+        <div className="flex items-center space-x-4">
+            <button
+                onClick={() => generateMerkleTree(ownerAddresses)}
+                disabled={!owners?.length}
+            >
+                Create whitelist
+            </button>
+            <button>Download owners</button>
         </div>
     );
 };
@@ -176,7 +216,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
             `/nfts/${tokenAddress}`
         );
 
-        
         return {
             props: {
                 collection: data,
