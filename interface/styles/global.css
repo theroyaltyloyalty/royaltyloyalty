@@ -15,3 +15,9 @@
         @apply mx-auto w-[92%] max-w-[1000px];
     }
 }
+
+@layer utilities {
+    button {
+        @apply outline-none focus:outline-none;
+    }
+}

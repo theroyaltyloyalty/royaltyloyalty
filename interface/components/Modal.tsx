@@ -73,7 +73,7 @@ function DialogWrapper(props: Partial<ModalProps>) {
                 <div className="flex min-h-full items-end justify-center pt-6 md:items-center md:px-0 md:pb-6">
                     <Dialog.Panel
                         className={classNames(
-                            'relative w-full rounded-none bg-black md:rounded-md max-w-[768px]',
+                            'relative w-full rounded-none bg-[#02040F] md:rounded-md max-w-[768px]',
                             className
                         )}
                     >
@@ -104,7 +104,7 @@ function DrawerWrapper(props: Partial<ModalProps>) {
                     <Dialog.Panel
                         className={classNames(
                             'relative h-full w-full rounded-lg',
-                            className || 'bg-black/95'
+                            className || 'bg-[#02040F]/95'
                         )}
                     >
                         {!hideCloseButton && <CloseButton onClose={onClose} />}
