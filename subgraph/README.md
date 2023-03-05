@@ -4,68 +4,12 @@ A subgraph that indexes royalty events.
 
 ## Quickstart
 
+From a clean pull:
 ```sh
-npm run
+npm install
 ```
 
-## RoyaltyLoyalty Subgraph
-
-This repo contains the templates for compiling and deploying a graphql schema to thegraph.
-
-### Authenticate
-
-To authenticate for thegraph deployment use the `Access Token` from thegraph dashboard:
-
-```sh
-npm run run graph auth https://api.thegraph.com/deploy/ $ACCESS_TOKEN
-```
-
-### Create subgraph.yaml from config template
-
-```sh
-# Official Subgraph
-npm run prepare:[network] # Supports mumbai and mainnet
-
-# Fork
-npm run --silent mustache config/[network]-fork.json subgraph.yaml.mustache > subgraph.yaml
-```
-
-### Generate types to use with Typescript
-
-```sh
-npm run codegen
-```
-
-### Compile and deploy to thegraph (must be authenticated)
-
-```sh
-# Official Subgraph
-npm run deploy:[network] # Supports mumbai and mainnet
-
-# Fork
-npm run deploy [organization]/[subgraph-name]
-```
-
-## Running a local deployment
-
-Make sure you have Docker installed.
-Run your local graph node by running:
-
-```sh
-npm run graph-node
-```
-
-Make sure your local chain is running: in a new terminal go to the `contracts` package and run:
-
-```sh
-npm run task:run-local
-```
-
-Then in a new terminal run:
-
-```sh
-npm run deploy:hardhat
-```
+# RoyaltyLoyalty Subgraph
 
 ## Running tests
 
@@ -77,10 +21,47 @@ Copy `matchstick.yaml.example` and name the copy `matchstick.yaml`. Make sure th
 
 ### Running tests
 
-From a clean pull run these commands in sequence:
+Run these commands in sequence
 
 ```sh
-npm run prepare:mumbai && yarn codegen
+npm run prepare:local 
+```
 
+```sh
+npm run codegen
+```
+
+```sh
 npm run test
+```
+
+## Deploy Your Own - UPDATE stevennevins/royaltyloyaly in package.json
+
+### Authenticate
+
+To authenticate for thegraph deployment use the `Access Token` from thegraph dashboard:
+
+```sh
+graph auth --product hosted-service $ACCESS_TOKEN
+```
+
+### Create subgraph.yaml from config template
+
+## Prepare Subgraph
+```sh
+npm run prepare:mumbai
+
+```
+
+### Generate types to use with Typescript
+
+```sh
+npm run codegen
+```
+
+### Compile and deploy to thegraph (must be authenticated)
+
+## Deploy Subgraph
+```sh
+npm run deploy:mumbai
 ```

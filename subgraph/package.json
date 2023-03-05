@@ -10,6 +10,7 @@
         "graph-node": "docker-compose up",
         "clean": "rimraf ./src/types ./build subgraph.yaml",
         "prepare:local": "mustache config/local.json subgraph.yaml.mustache > subgraph.yaml",
+        "prepare:mumbai": "mustache config/mumbai.json subgraph.yaml.mustache > subgraph.yaml",
         "prepare:hardhat": "mustache config/hardhat.json subgraph.yaml.mustache > subgraph.yaml",
         "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
         "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
@@ -27,6 +28,7 @@
         "deploy:rinkeby": "npm run clean && npm run prepare:rinkeby && npm run codegen && npm run deploy theroyaltyloyalty/royaltyloyalty",
         "deploy:mainnet": "npm run clean && npm run prepare:mainnet && npm run codegen && npm run deploy theroyaltyloyalty/royaltyloyalty",
         "deploy:goerli": "npm run clean && npm run prepare:goerli && npm run codegen && npm run deploy theroyaltyloyalty/royaltyloyalty",
+        "deploy:mumbai": "npm run clean && npm run prepare:mumbai && npm run codegen && npm run deploy stevennevins/royaltyloyalty",
         "mustache": "mustache"
     },
     "devDependencies": {

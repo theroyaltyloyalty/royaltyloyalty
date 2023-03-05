@@ -15,6 +15,7 @@ import { Asset, Collection } from 'types/infuraTypes';
 import { OwnerData, OwnerExtended, Royalty, RoyaltyData } from 'types/types';
 import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
+import { CreatePublication } from '../../components';
 import { MainContext } from '../../contexts/MainContext';
 import { generateMerkleTree } from 'utils/merkleTree';
 import useOwnersExtended from 'hooks/useOwnersExtended';
@@ -88,6 +89,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                     </div>
                     <Actions owners={owners} />
                 </div>
+                {profile?.profileId && <CreatePublication />}
                 <Stats
                     owners={owners}
                     tokens={tokens}
