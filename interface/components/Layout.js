@@ -1,21 +1,21 @@
-import {
-    Connect, Header
-} from '../components';
+import { Header } from '../components';
 import { useIsMounted } from '../hooks';
-import { useAccount } from 'wagmi';
+import ProgressBar from './ProgressBar';
 
 export function Layout({ children }) {
     const isMounted = useIsMounted();
-    const { isConnected } = useAccount();
 
     return (
         <>
-            {isMounted && <>
+            {isMounted && (
                 <>
-                    <Header />
-                    {children}
+                    <>
+                        <ProgressBar />
+                        <Header />
+                        {children}
+                    </>
                 </>
-            </>}
+            )}
         </>
     );
 }

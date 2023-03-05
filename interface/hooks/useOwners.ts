@@ -56,17 +56,31 @@ const getUniqueOwners = (owners: Owner[]) => {
     return Object.values(ownersObj);
 };
 
+const getOwnerByTokenId = (owners: Owner[]) => {
+    const ownersObj: Record<string, string> = {};
+
+    owners.forEach((owner) => {
+        ownersObj[owner.tokenId] = owner.ownerOf;
+    });
+
+    return ownersObj;
+};
+
 export default function useOwners(tokenAddress: string) {
     return useQuery({
         queryKey: ['owners', tokenAddress],
         queryFn: async () => {
             const allOwners = await getAllOwners(tokenAddress);
+            const ownerByTokenId = getOwnerByTokenId(allOwners);
             const uniqueOwners = getUniqueOwners(allOwners);
             const sortedOwners = uniqueOwners.sort(
                 (a, b) => b.balance - a.balance
             );
 
-            return sortedOwners;
+            return {
+                owners: sortedOwners,
+                ownerByTokenId,
+            };
         },
     });
 }

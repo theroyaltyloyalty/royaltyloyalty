@@ -24,3 +24,15 @@ export interface OwnerData {
     balance: number;
     tokens: string[];
 }
+
+export interface Royalty {
+    bps: number;
+    percent: number;
+}
+
+export interface RoyaltyStats {
+    royaltiesPaid: number;
+    royaltiesDodged: number;
+    royaltiesAmountPaid: string;
+    percentagePaid: number;
+}

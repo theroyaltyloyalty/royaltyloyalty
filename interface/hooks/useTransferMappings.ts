@@ -9,6 +9,7 @@ export default function useTransferMappings(
     for (let i = 0; i < transfersWithRoyalty?.length; i++) {
         const transfer = transfersWithRoyalty[i];
         const { toAddress, tokenId } = transfer;
+
         if (!tokensToTransfers[tokenId]) {
             tokensToTransfers[tokenId] = [i];
         } else {

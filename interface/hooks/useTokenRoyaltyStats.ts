@@ -1,8 +1,8 @@
 import { TransferWithRoyalty, RoyaltyStats } from 'types/types';
 import { BigNumber } from 'ethers';
 
-export default function useOwnerRoyaltyStats(
-    ownerTransfers?: number[],
+export default function useTokenRoyaltyStats(
+    tokenTransfers?: number[],
     transfers?: TransferWithRoyalty[]
 ) {
     const stats: RoyaltyStats = {
@@ -12,11 +12,11 @@ export default function useOwnerRoyaltyStats(
         percentagePaid: 0,
     };
 
-    if (!ownerTransfers || !transfers) {
+    if (!tokenTransfers || !transfers) {
         return stats;
     }
 
-    for (const transferIndex of ownerTransfers) {
+    for (const transferIndex of tokenTransfers) {
         const transfer = transfers[transferIndex];
 
         if (transfer.royaltyPayment && transfer.royaltyPayment.amount !== '0') {
@@ -32,7 +32,7 @@ export default function useOwnerRoyaltyStats(
     }
 
     stats.percentagePaid = Math.round(
-        (stats.royaltiesPaid / ownerTransfers.length) * 100
+        (stats.royaltiesPaid / tokenTransfers.length) * 100
     );
 
     return stats;
