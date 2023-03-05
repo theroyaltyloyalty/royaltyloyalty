@@ -40,8 +40,8 @@ const ResultArea = ({
     const [isCopied, setIsCopied] = useState(false);
 
     return (
-        <div className="bg-white/5 rounded-md py-4">
-            <div className="w-full px-4 pb-4 flex text-gray-400 items-center justify-between">
+        <div className="bg-white/5 rounded-md py-5">
+            <div className="w-full px-5 pb-4 flex text-gray-400 items-center justify-between">
                 <div className="text-xs uppercase font-bold">{title}</div>
                 <div className="text-xs cursor-pointer">
                     <Copy
@@ -61,7 +61,7 @@ const ResultArea = ({
                     </Copy>
                 </div>
             </div>
-            <div className="px-4 text-sm space-y-2">
+            <div className="px-5 text-sm space-y-2">
                 {typeof value === 'string'
                     ? value
                     : value.map((v) => <div key={v}>{v}</div>)}
