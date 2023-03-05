@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Button, Container, Image, Text } from '@chakra-ui/react';
+import { Container, Image, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useSigner } from 'wagmi';
 import { MainContext } from '../contexts/MainContext';
@@ -106,7 +106,7 @@ export function ConnectLens() {
     ]);
 
     return (
-        <Container width="100%" textAlign="right">
+        <div>
             {profile.handle ? (
                 <Container
                     background="#abfe2ccc"
@@ -134,18 +134,15 @@ export function ConnectLens() {
                     <Text fontWeight="bold">{handle}</Text>
                 </Container>
             ) : (
-                <Button
-                    background="#abfe2ccc"
-                    color="#00501e"
-                    border="none"
-                    height="40px"
+                <button
+                    className="text-sm rounded-lg bg-[#abfe2ccc] text-[#00501e] border-none h-10 hover:opacity-90 transition-opacity duration-200"
                     onClick={() =>
                         window.open('https://testnet.lenster.xyz/', '_blank')
                     }
                 >
-                    Connect Lens 🌿
-                </Button>
+                    <div>Connect Lens 🌿</div>
+                </button>
             )}
-        </Container>
+        </div>
     );
 }

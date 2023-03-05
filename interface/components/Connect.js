@@ -1,11 +1,7 @@
-import { Container } from '@chakra-ui/react';
 import { useWeb3ModalTheme, Web3Button } from '@web3modal/react';
 
 export function Connect() {
-    const { theme, setTheme } = useWeb3ModalTheme();
-
-    // Modal's theme object
-    theme;
+    const { setTheme } = useWeb3ModalTheme();
 
     // Set modal theme
     setTheme({
@@ -14,9 +10,5 @@ export function Connect() {
         themeBackground: 'gradient',
     });
 
-    return (
-        <Container width='100%' textAlign='right' padding='0'>
-            <Web3Button />
-        </Container>
-    );
+    return <Web3Button />;
 }
