@@ -16,10 +16,10 @@ export default function TokensList({
     return (
         <table className="w-full table-auto text-sm">
             <thead className="text-right">
-                <tr>
+                <tr className="h-12 uppercase text-xs">
                     <th></th>
                     <th className="text-left">Token</th>
-                    <th>Owner</th>
+                    <th className="text-left">Owner</th>
                     <th>Royalties Paid</th>
                     <th>Royalties Dodged</th>
                     <th>% Royalties Paid</th>
