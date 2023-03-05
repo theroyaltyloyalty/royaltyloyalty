@@ -39,7 +39,7 @@ function Home() {
                                 const { contract, name } = item;
 
                                 return (
-                                    <Link
+                                    contract && name && <Link
                                         key={key}
                                         href={`/nft/${contract}`}
                                     >
