@@ -3,6 +3,7 @@ import OwnersList from 'components/owners/OwnersList';
 import TokensList from 'components/tokens/TokensList';
 import useCollectionRoyalty from 'hooks/useCollectionRoyalty';
 import useOwners from 'hooks/useOwners';
+import useOwnersExtended from 'hooks/useOwnersExtended';
 import useRoyalties from 'hooks/useRoyalties';
 import useTokens from 'hooks/useTokens';
 import useTransferMappings from 'hooks/useTransferMappings';
@@ -15,10 +16,9 @@ import { Asset, Collection } from 'types/infuraTypes';
 import { OwnerData, OwnerExtended, Royalty, RoyaltyData } from 'types/types';
 import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
+import { generateMerkleTree } from 'utils/merkleTree';
 import { CreatePublication } from '../../components';
 import { MainContext } from '../../contexts/MainContext';
-import { generateMerkleTree } from 'utils/merkleTree';
-import useOwnersExtended from 'hooks/useOwnersExtended';
 
 export enum PageTab {
     Owners = 'Owners',
@@ -88,8 +88,8 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         <p>{shortenAddress(collection.contract)}</p>
                     </div>
                     <Actions owners={owners} />
+                    {profile?.profileId && <CreatePublication selectedOwners={selectedOwners} />}
                 </div>
-                {profile?.profileId && <CreatePublication />}
                 <Stats
                     owners={owners}
                     tokens={tokens}
