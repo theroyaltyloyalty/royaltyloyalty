@@ -19,6 +19,7 @@ import {
     useContext,
     useState,
 } from 'react';
+import Head from 'next/head';
 import infuraClient from 'services/infuraClient';
 import { Asset, Collection } from 'types/infuraTypes';
 import { OwnerData, OwnerExtended, Royalty, RoyaltyData } from 'types/types';
@@ -88,62 +89,73 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     };
 
     return (
-        <div className="py-12">
-            <div className="container-content space-y-10">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                        <Avatar
-                            name={collection.contract}
-                            size={64}
-                            className="rounded-md"
-                            square={true}
-                        />
-                        <div>
-                            <h1 className="font-bold text-4xl mb-1">
-                                {collection.name}
-                            </h1>
-                            <p className="text-sm text-gray-200">
-                                {shortenAddress(collection.contract)}
-                            </p>
+        <>
+            <Head>
+                <title>{collection.name}</title>
+                <meta name="description" content={collection.name} />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+
+            <div className="py-12">
+                <div className="container-content space-y-10">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                            <Avatar
+                                name={collection.contract}
+                                size={64}
+                                className="rounded-md"
+                                square={true}
+                            />
+                            <div>
+                                <h1 className="font-bold text-4xl mb-1">
+                                    {collection.name}
+                                </h1>
+                                <p className="text-sm text-gray-200">
+                                    {shortenAddress(collection.contract)}
+                                </p>
+                            </div>
                         </div>
+                        <Actions
+                            collection={collection}
+                            selectedOwners={selectedOwners}
+                            setIsWhitelistModalOpen={setIsWhitelistModalOpen}
+                            setMerkleRoot={setMerkleRoot}
+                        />
+                        {profile?.profileId && selectedOwners.length > 1 && (
+                            <button onClick={() => setIsPostModalOpen(true)}>
+                                Post
+                            </button>
+                        )}
                     </div>
-                    <Actions
-                        collection={collection}
-                        selectedOwners={selectedOwners}
-                        setIsWhitelistModalOpen={setIsWhitelistModalOpen}
-                        setMerkleRoot={setMerkleRoot}
+                    <Stats
+                        owners={owners}
+                        tokens={tokens}
+                        royalty={royalty}
+                        royaltyData={royaltyData}
                     />
-                    {profile?.profileId && selectedOwners.length > 1 && (
-                        <button onClick={() => setIsPostModalOpen(true)}>
-                            Post
-                        </button>
-                    )}
+                    <div>
+                        <Tabs
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
+                        />
+                        {tabToComponent[activeTab]}
+                    </div>
                 </div>
-                <Stats
-                    owners={owners}
-                    tokens={tokens}
-                    royalty={royalty}
-                    royaltyData={royaltyData}
-                />
-                <div>
-                    <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
-                    {tabToComponent[activeTab]}
-                </div>
-            </div>
-            {profile?.profileId && selectedOwners.length > 1 && (
-                <PostModal
-                    isOpen={isPostModalOpen}
-                    setIsOpen={setIsPostModalOpen}
+                {profile?.profileId && selectedOwners.length > 1 && (
+                    <PostModal
+                        isOpen={isPostModalOpen}
+                        setIsOpen={setIsPostModalOpen}
+                        selectedOwners={selectedOwners}
+                    />
+                )}
+                <WhitelistModal
+                    isOpen={isWhitelistModalOpen}
+                    setIsOpen={setIsWhitelistModalOpen}
                     selectedOwners={selectedOwners}
+                    merkleRoot={merkleRoot}
                 />
-            )}
-            <WhitelistModal
-                isOpen={isWhitelistModalOpen}
-                setIsOpen={setIsWhitelistModalOpen}
-                selectedOwners={selectedOwners}
-                merkleRoot={merkleRoot}
-            />
-        </div>
+            </div>
+        </>
     );
 };
 
