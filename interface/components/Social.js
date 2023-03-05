@@ -1,4 +1,4 @@
-import { Button, Container, Text } from '@chakra-ui/react';
+import { Container, Text } from '@chakra-ui/react';
 import * as React from 'react';
 import { useCheckFollower } from '../hooks';
 
@@ -9,7 +9,7 @@ export function Social({ address, id }) {
     return (
         <Container >
             {id && doesFollow
-                ? <Text
+                && <Text
                     background='#BCFE65'
                     color='#00501E'
                     border='none'
@@ -23,15 +23,6 @@ export function Social({ address, id }) {
                 >
                     Follows you
                 </Text>
-                : <Button
-                    width='fit-content'
-                    padding='8px 16px'
-                    fontWeight='bold'
-                    margin='0 auto'
-                    onClick={() => setFollowFee()}
-                >
-                    Set a follow fee
-                </Button>
             }
         </Container>
     );
