@@ -18,7 +18,7 @@ export interface Asset {
     tokenId: string;
     supply: string;
     type: string;
-    metadata?: string;
+    metadata?: Metadata;
 }
 
 export interface Token {

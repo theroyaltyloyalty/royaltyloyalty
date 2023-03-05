@@ -1,51 +1,21 @@
-import {
-    Container, Tab, Tabs, TabList, Text
-} from '@chakra-ui/react';
 import { Connect, ConnectLens } from './index';
-import { FaCarrot } from 'react-icons/fa';
-import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
+import { Link } from '@chakra-ui/react';
 
 export function Header() {
     const { isConnected } = useAccount();
-    const router = useRouter();
-
-    function handleTabs(num) {
-        num === 0 ? router.push('/') : router.push('/tokens');
-    }
 
     return (
-        <Container
-            display='flex'
-            justifyContent='space-between'
-            minWidth='100vw'
-            padding='16px 15vw'
-            margin='0'
-            borderBottom='2px solid #2d2d2d'
-        >
-            <Container
-                display='flex'
-                alignItems='center'
-                fontWeight='bold'
-                fontSize='28px'
-            >
-                <Text color='#C94E12' >Royalty</Text>
-                <FaCarrot color='#933707' />
-                <Text color='#C94E12'>Loyalty</Text>
-            </Container>
-            <Tabs
-                width='100%'
-                variant='soft-rounded'
-                colorScheme='orange'
-                onChange={(num) => handleTabs(num)}
-            >
-                <TabList>
-                    <Tab>Holders</Tab>
-                    <Tab>Tokens</Tab>
-                </TabList>
-            </Tabs>
-            {isConnected && <ConnectLens/>}
-            <Connect />
-        </Container>
+        <header className="h-20 border-b border-b-white flex items-center">
+            <div className="container-content flex items-center justify-between">
+                <Link href="/">
+                    <div className="font-bold text-xl">Royalty Loyalty</div>
+                </Link>
+                <nav className="flex items-center">
+                    {isConnected && <ConnectLens />}
+                    <Connect />
+                </nav>
+            </div>
+        </header>
     );
 }
