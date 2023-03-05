@@ -65,7 +65,7 @@ export const globalCSS = {
                 textDecoration: 'none',
             },
             button: {
-                border: '1px solid #2d2d2d',
+                border: '1px solid #2F3137',
                 padding: '8px 22px',
                 background: 'transparent',
                 fontWeight: 'bold',
