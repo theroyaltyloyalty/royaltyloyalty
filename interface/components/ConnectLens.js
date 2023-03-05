@@ -140,7 +140,7 @@ export function ConnectLens() {
                     border="none"
                     height="40px"
                     onClick={() =>
-                        window.open('https://claim.lens.xyz/', '_blank')
+                        window.open('https://testnet.lenster.xyz/', '_blank')
                     }
                 >
                     Connect Lens 🌿
