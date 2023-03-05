@@ -60,8 +60,8 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
 
     // STATE
     const [activeTab, setActiveTab] = useState(PageTab.Owners);
-    const [selectedOwners, setSelectedOwners] = useState<OwnerExtended[]>([]);
     const [isWhitelistModalOpen, setIsWhitelistModalOpen] = useState(false);
+    const [selectedOwners, setSelectedOwners] = useState<OwnerExtended[]>([]);
 
     // EFFECTS
     // Reset selected owners when tab changes
@@ -69,13 +69,19 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
         if (activeTab !== PageTab.Owners && selectedOwners.length > 0) {
             setSelectedOwners([]);
         }
-    }, [activeTab, selectedOwners.length]);
+    }, [activeTab, selectedOwners]);
 
     // TABS
     const tabToComponent: {
         [key in PageTab]: JSX.Element;
     } = {
-        [PageTab.Owners]: <OwnersList owners={ownersExtended} />,
+        [PageTab.Owners]: (
+            <OwnersList
+                owners={ownersExtended}
+                selectedOwners={selectedOwners}
+                setSelectedOwners={setSelectedOwners}
+            />
+        ),
         [PageTab.Tokens]: (
             <TokensList
                 tokens={tokens}
@@ -116,6 +122,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
             <WhitelistModal
                 isOpen={isWhitelistModalOpen}
                 setIsOpen={setIsWhitelistModalOpen}
+                selectedOwners={selectedOwners}
             />
         </div>
     );
