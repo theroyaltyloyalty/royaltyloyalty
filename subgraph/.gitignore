@@ -1,6 +1,7 @@
 src/types
 subgraph.yaml
 # graph-node docker data folder
+build/
 data
 matchstick.yaml
 tests/.bin

@@ -13,3 +13,50 @@ type TransferEvent @entity {
   "The timestamp of the block the event is in"
   blockTimestamp: BigInt!
 }
+
+type RoyaltyEvent @entity {
+  "The txn hash of this event"
+  id: ID!
+  
+  tokenId: BigInt
+
+  operator: String
+
+  payer: String
+
+  royaltyCurrency: String
+
+  royaltyAmount: BigInt
+
+  "Block number of the event"
+  blockNumber: BigInt
+
+}
+
+type Holder @entity {
+  "The address of holder"
+  id: String!
+
+  tokens: [NFT!]! 
+
+}
+
+type Royalty @entity {
+    "nft id"
+    id: String!
+
+    royaltyCurrency: String!
+
+    lastPrice: BigInt!
+
+    lastRoyalty: BigInt!
+
+}
+
+type NFT @entity {
+  "The nft id"
+  id: String!
+
+  lastRoyalty: Royalty!
+  
+}
