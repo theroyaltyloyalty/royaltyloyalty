@@ -1,12 +1,9 @@
 import { gql } from '@apollo/client';
 import { Button, Container, Image, Text } from '@chakra-ui/react';
-import { ethers, utils } from 'ethers';
-import omitDeep from 'omit-deep';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useSigner } from 'wagmi';
-import LENS_HUB_ABI from '../abi/lens-hub-contract-abi.json';
 import { MainContext } from '../contexts/MainContext';
-import { checkProfile, revertFollowModule } from '../gqlQueries';
+import { checkProfile } from '../gqlQueries';
 import { useApolloClient, useToastErr } from '../hooks';
 import { fetched } from '../shared/constants';
 
@@ -34,7 +31,6 @@ const authenticate = gql`
   `;
 
 export function ConnectLens() {
-    const LENS_HUB_CONTRACT = process.env.NEXT_PUBLIC_LENS_HUB_CONTRACT;
     const { address, isConnected } = useAccount();
     const { data: signer } = useSigner();
     const toastErr = useToastErr();
@@ -52,7 +48,7 @@ export function ConnectLens() {
                 .then(res => {
                     const { items } = res.data.profiles;
                     if (items.length > 0) {
-                        const { handle, id, followModule } = items[0];
+                        const { handle, id } = items[0];
                         const { url } = items[0].picture.original;
                         const ipfs = url.replace('ipfs://', '');
                         client.query({
@@ -68,52 +64,6 @@ export function ConnectLens() {
                                         }
                                     }).then(res => {
                                         const { accessToken } = res.data.authenticate;
-
-                                        if (!followModule) {
-                                            const _revertFollowModule = gql`${revertFollowModule(id)}`;
-                                            client.mutate({
-                                                mutation: _revertFollowModule,
-                                                context: {
-                                                    headers: {
-                                                        Authorization: `Bearer ${accessToken}`
-                                                    }
-                                                }
-                                            }).then(res => {
-                                                const { domain, types, value } =
-                                                    res.data.createSetFollowModuleTypedData.typedData;
-
-                                                signer._signTypedData(
-                                                    omitDeep(domain, '__typename'),
-                                                    omitDeep(types, '__typename'),
-                                                    omitDeep(value, '__typename')
-                                                ).then((signature) => {
-                                                    const { v, r, s } = utils.splitSignature(signature);
-
-                                                    const lensHub = new ethers.Contract(
-                                                        LENS_HUB_CONTRACT,
-                                                        LENS_HUB_ABI,
-                                                        signer
-                                                    );
-
-                                                    lensHub.setFollowModuleWithSig({
-                                                        profileId: value.profileId,
-                                                        followModule: value.followModule,
-                                                        followModuleInitData: value.followModuleInitData,
-                                                        sig: {
-                                                            v,
-                                                            r,
-                                                            s,
-                                                            deadline: value.deadline,
-                                                        },
-                                                    })
-                                                        .catch(err => toastErr(err, tries, setCheckedProfile));
-
-                                                }).catch(err => toastErr(err, tries, setCheckedProfile));
-
-                                            }).catch(err => toastErr(err, tries, setCheckedProfile));
-
-                                        }
-
                                         setProfile({
                                             accessToken,
                                             profileId: id,
@@ -129,7 +79,7 @@ export function ConnectLens() {
         }
     }, [
         address, checkedProfile, client, isConnected, profile.handle,
-        setProfile, signer, toastErr, LENS_HUB_CONTRACT
+        setProfile, signer, toastErr
     ]);
 
     return (
