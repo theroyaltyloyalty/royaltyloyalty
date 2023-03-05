@@ -8,7 +8,7 @@ import { MainContext } from '../contexts/MainContext';
 import { useApolloClient, useToastErr } from '../hooks';
 import { getSigner, lensHub, signCreatePostTypedData, splitSignature } from '../lens-api';
 
-export function CreatePublication() {
+export function CreatePublication({ selectedOwners }) {
     const toastErr = useToastErr();
     const client = useApolloClient();
     const { profile } = useContext(MainContext);
@@ -134,13 +134,13 @@ export function CreatePublication() {
             { /* once the user has authenticated, show the the main app */}
             {
                 address && accessToken && (
-                    <div>
-                        <textarea
-                            onChange={onChange}
-                            placeholder="Encrypted post content"
-                        />
-                        <button onClick={createPost}>Submit</button>
-                    </div>
+                    // <div>
+                    //     <textarea
+                    //         onChange={onChange}
+                    //         placeholder="Encrypted post content"
+                    //     />
+                    <button onClick={createPost}>Post</button>
+                    // </div>
                 )
             }
         </div>

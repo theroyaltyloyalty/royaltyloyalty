@@ -1,8 +1,10 @@
 import { isAddress } from '@ethersproject/address';
+import WhitelistModal from 'components/modals/WhitelistModal';
 import OwnersList from 'components/owners/OwnersList';
 import TokensList from 'components/tokens/TokensList';
 import useCollectionRoyalty from 'hooks/useCollectionRoyalty';
 import useOwners from 'hooks/useOwners';
+import { default as useOwnersExtended } from 'hooks/useOwnersExtended';
 import useRoyalties from 'hooks/useRoyalties';
 import useTokens from 'hooks/useTokens';
 import useTransferMappings from 'hooks/useTransferMappings';
@@ -10,23 +12,20 @@ import useTransfers from 'hooks/useTransfers';
 import useTransfersWithRoyalties from 'hooks/useTransfersWithRoyalties';
 import type { GetServerSideProps, NextPage } from 'next';
 import {
-    useContext,
+    Dispatch,
+    SetStateAction, useContext,
     useEffect,
     useMemo,
-    useState,
-    Dispatch,
-    SetStateAction,
+    useState
 } from 'react';
 import infuraClient from 'services/infuraClient';
 import { Asset, Collection } from 'types/infuraTypes';
 import { OwnerData, OwnerExtended, Royalty, RoyaltyData } from 'types/types';
 import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
+import { generateMerkleTree } from 'utils/merkleTree';
 import { CreatePublication } from '../../components';
 import { MainContext } from '../../contexts/MainContext';
-import { generateMerkleTree } from 'utils/merkleTree';
-import useOwnersExtended from 'hooks/useOwnersExtended';
-import WhitelistModal from 'components/modals/WhitelistModal';
 
 export enum PageTab {
     Owners = 'Owners',
@@ -100,8 +99,8 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         owners={owners}
                         setIsWhitelistModalOpen={setIsWhitelistModalOpen}
                     />
+                    {profile?.profileId && <CreatePublication selectedOwners={selectedOwners} />}
                 </div>
-                {profile?.profileId && <CreatePublication />}
                 <Stats
                     owners={owners}
                     tokens={tokens}
