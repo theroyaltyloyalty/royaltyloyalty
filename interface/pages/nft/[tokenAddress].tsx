@@ -120,12 +120,9 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                             selectedOwners={selectedOwners}
                             setIsWhitelistModalOpen={setIsWhitelistModalOpen}
                             setMerkleRoot={setMerkleRoot}
+                            profile={profile}
+                            setIsPostModalOpen={setIsPostModalOpen}
                         />
-                        {profile?.profileId && selectedOwners.length > 1 && (
-                            <button onClick={() => setIsPostModalOpen(true)}>
-                                Post
-                            </button>
-                        )}
                     </div>
                     <Stats
                         owners={owners}
@@ -245,11 +242,20 @@ const Actions = ({
     selectedOwners,
     setMerkleRoot,
     setIsWhitelistModalOpen,
+    profile,
+    setIsPostModalOpen,
 }: {
     collection: Collection;
     selectedOwners: OwnerExtended[];
     setMerkleRoot: Dispatch<SetStateAction<string | null>>;
     setIsWhitelistModalOpen: Dispatch<SetStateAction<boolean>>;
+    profile: {
+        accessToken: any;
+        handle: any;
+        profileId: any;
+        ipfs: any;
+    };
+    setIsPostModalOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
     const handleMerkleTreeClick = useCallback(() => {
         if (!selectedOwners?.length) {
@@ -291,6 +297,14 @@ const Actions = ({
             >
                 Download collectors
             </button>
+            {profile?.profileId && selectedOwners.length > 1 && (
+                <button
+                    className="py-2 rounded-lg"
+                    onClick={() => setIsPostModalOpen(true)}
+                >
+                    Post
+                </button>
+            )}
         </div>
     );
 };
