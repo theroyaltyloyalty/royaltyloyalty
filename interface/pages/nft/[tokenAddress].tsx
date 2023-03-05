@@ -1,20 +1,22 @@
 import { isAddress } from '@ethersproject/address';
-import useOwners from 'hooks/useOwners';
-import useTokens from 'hooks/useTokens';
-import useTransfers from 'hooks/useTransfers';
-import type { GetServerSideProps, NextPage } from 'next';
-import infuraClient from 'services/infuraClient';
-import { Collection, Asset } from 'types/infuraTypes';
-import { shortenAddress } from 'utils/address';
-import useRoyalties from 'hooks/useRoyalties';
-import useTransfersWithRoyalties from 'hooks/useTransfersWithRoyalties';
-import useTransferMappings from 'hooks/useTransferMappings';
-import { OwnerData, Royalty, RoyaltyData } from 'types/types';
-import { convertToEth } from 'utils/currency';
-import useCollectionRoyalty from 'hooks/useCollectionRoyalty';
-import { useState } from 'react';
 import OwnersList from 'components/owners/OwnersList';
 import TokensList from 'components/tokens/TokensList';
+import useCollectionRoyalty from 'hooks/useCollectionRoyalty';
+import useOwners from 'hooks/useOwners';
+import useRoyalties from 'hooks/useRoyalties';
+import useTokens from 'hooks/useTokens';
+import useTransferMappings from 'hooks/useTransferMappings';
+import useTransfers from 'hooks/useTransfers';
+import useTransfersWithRoyalties from 'hooks/useTransfersWithRoyalties';
+import type { GetServerSideProps, NextPage } from 'next';
+import { useContext, useState } from 'react';
+import infuraClient from 'services/infuraClient';
+import { Asset, Collection } from 'types/infuraTypes';
+import { OwnerData, Royalty, RoyaltyData } from 'types/types';
+import { shortenAddress } from 'utils/address';
+import { convertToEth } from 'utils/currency';
+import { Social } from '../../components';
+import { MainContext } from '../../contexts/MainContext';
 
 export enum PageTab {
     Owners = 'Owners',
@@ -23,7 +25,8 @@ export enum PageTab {
 
 const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     const [activeTab, setActiveTab] = useState(PageTab.Owners);
-
+    const { profile } = useContext(MainContext);
+    const { profileId } = profile;
     const { data: tokens } = useTokens(collection.contract);
     const { data: ownersData } = useOwners(collection.contract);
     const { data: transfers } = useTransfers(collection.contract);
@@ -171,6 +174,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         const { data } = await infuraClient.get<Collection>(
             `/nfts/${tokenAddress}`
         );
+
+        
         return {
             props: {
                 collection: data,

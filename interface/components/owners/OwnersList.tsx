@@ -1,5 +1,5 @@
-import OwnerItem from './OwnerItem';
 import { OwnerData, TransferWithRoyalty } from 'types/types';
+import OwnerItem from './OwnerItem';
 
 export default function OwnersList({
     owners,
@@ -21,6 +21,7 @@ export default function OwnersList({
                     <th>Royalties Dodged</th>
                     <th>% Royalties Paid</th>
                     <th>Royalties Amount Paid</th>
+                    <th>Social</th>
                 </tr>
             </thead>
             <tbody>
