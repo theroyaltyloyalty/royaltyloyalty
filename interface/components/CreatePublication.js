@@ -1,3 +1,4 @@
+import { Container, Textarea } from '@chakra-ui/react';
 import { LensEnvironment, LensGatedSDK } from '@lens-protocol/sdk-gated';
 import axios from 'axios';
 import { ethers } from 'ethers';
@@ -8,7 +9,7 @@ import { MainContext } from '../contexts/MainContext';
 import { useApolloClient, useToastErr } from '../hooks';
 import { getSigner, lensHub, signCreatePostTypedData, splitSignature } from '../lens-api';
 
-export function CreatePublication() {
+export function CreatePublication({ selectedOwners, setIsOpen }) {
     const toastErr = useToastErr();
     const client = useApolloClient();
     const { profile } = useContext(MainContext);
@@ -34,7 +35,7 @@ export function CreatePublication() {
 
     async function createPost() {
         if (!postData) { return; };
-        /* we first encrypt and upload the data to IPFS */
+
         const {
             encryptedMetadata, contentURI
         } = await uploadToIPFS();
@@ -44,7 +45,6 @@ export function CreatePublication() {
             and: { criteria: addresses }
         };
 
-        /* configure the final post data containing the content URI and the gated configuration */
         const createPostRequest = {
             profileId,
             contentURI: 'ipfs://' + contentURI,
@@ -56,27 +56,28 @@ export function CreatePublication() {
             },
             gated
         };
-        try {
-            /* this code creates a typed data request (using the createPostRequest object) and sends the transaction to the network */
-            const signedResult = await signCreatePostTypedData(createPostRequest, accessToken, client);
-            const typedData = signedResult.result.typedData;
-            const { v, r, s } = splitSignature(signedResult.signature);
-            const tx = await lensHub.postWithSig({
-                profileId: typedData.value.profileId,
-                contentURI: typedData.value.contentURI,
-                collectModule: typedData.value.collectModule,
-                collectModuleInitData: typedData.value.collectModuleInitData,
-                referenceModule: typedData.value.referenceModule,
-                referenceModuleInitData: typedData.value.referenceModuleInitData,
-                sig: {
-                    v,
-                    r,
-                    s,
-                    deadline: typedData.value.deadline,
-                },
+
+        const signedResult = await signCreatePostTypedData(createPostRequest, accessToken, client);
+        const typedData = signedResult.result.typedData;
+        const { v, r, s } = splitSignature(signedResult.signature);
+        lensHub.postWithSig({
+            profileId: typedData.value.profileId,
+            contentURI: typedData.value.contentURI,
+            collectModule: typedData.value.collectModule,
+            collectModuleInitData: typedData.value.collectModuleInitData,
+            referenceModule: typedData.value.referenceModule,
+            referenceModuleInitData: typedData.value.referenceModuleInitData,
+            sig: {
+                v,
+                r,
+                s,
+                deadline: typedData.value.deadline,
+            },
+        }).then(() => setIsOpen(false))
+            .catch(err => {
+                toastErr(err);
+                setIsOpen(false);
             });
-        } catch (err) {
-        }
     }
     async function uploadToIPFS() {
         /* define the metadata */
@@ -133,15 +134,25 @@ export function CreatePublication() {
         <div>
             { /* once the user has authenticated, show the the main app */}
             {
-                address && accessToken && (
-                    <div>
-                        <textarea
-                            onChange={onChange}
-                            placeholder="Encrypted post content"
-                        />
-                        <button onClick={createPost}>Submit</button>
-                    </div>
-                )
+                address && accessToken && (<Container
+                    display='flex'
+                    flexDirection='column'
+                    alignItems='flex-end'
+                >
+                    <Textarea
+                        onChange={onChange}
+                        placeholder='Share the word!'
+                        margin='32px 0'
+                    />
+                    <button
+                        onClick={createPost}
+                        style={{
+                            width: 'fit-content'
+                        }}
+                    >
+                        Post
+                    </button>
+                </Container>)
             }
         </div>
     );
