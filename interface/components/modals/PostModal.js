@@ -1,7 +1,7 @@
 import { CreatePublication } from '../../components';
 import Modal from '../Modal';
 
-export default function WhitelistModal({
+export default function PostModal({
     isOpen,
     setIsOpen,
     selectedOwners

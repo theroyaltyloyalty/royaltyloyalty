@@ -99,7 +99,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         setIsWhitelistModalOpen={setIsWhitelistModalOpen}
                         setMerkleRoot={setMerkleRoot}
                     />
-                    {profile?.profileId && (
+                    {profile?.profileId && selectedOwners.length > 1 &&(
                         <button onClick={() => setIsPostModalOpen(true)}>
                             Post
                         </button>
@@ -116,7 +116,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                     {tabToComponent[activeTab]}
                 </div>
             </div>
-            {profile?.profileId && (
+            {profile?.profileId && selectedOwners.length > 1 &&(
                 <PostModal
                     isOpen={isPostModalOpen}
                     setIsOpen={setIsPostModalOpen}
