@@ -4,3 +4,5 @@ export const INFURA_API_URL = process.env.NEXT_PUBLIC_INFURA_API_URL || '';
 export const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY || '';
 export const INFURA_API_KEY_SECRET =
     process.env.NEXT_PUBLIC_INFURA_API_KEY_SECRET || '';
+export const WALLET_CONNECT_PROJECT_ID =
+    process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '';
