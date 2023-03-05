@@ -1,8 +1,7 @@
+import { gql } from '@apollo/client';
+import { useQuery } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { MainContext } from '../contexts/MainContext';
-import { useQuery } from '@tanstack/react-query';
-import { OwnerData } from 'types/types';
-import { gql } from '@apollo/client';
 import { doesFollow } from '../gqlQueries';
 import { useApolloClient } from './useApolloClient';
 
@@ -34,7 +33,7 @@ export default function useAreFollowers(addresses: string[]) {
                 const isFollower = data?.follows;
 
                 if (address) {
-                    followers[address] = isFollower;
+                    followers[address.toLowerCase()] = isFollower;
                 }
             }
 

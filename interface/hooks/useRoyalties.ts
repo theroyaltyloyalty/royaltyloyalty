@@ -1,36 +1,50 @@
+import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import { useQuery } from '@tanstack/react-query';
-import { Erc721__factory as Erc21Factory } from 'contracts';
 import { BigNumber } from 'ethers';
-import provider from 'services/provider';
 
-export default function useRoyalties(tokenAddress: string) {
+const royaltyEvents = gql`${`
+    query RoyaltyEvents {
+            royaltyEvents{
+                royaltyAmount
+                blockNumber
+                royaltyCurrency
+                id
+                tokenId
+                operator
+                payer
+            }
+    }
+`}`;
+
+export default function useRoyalties() {
+
+    const client = new ApolloClient({
+        uri: 'https://api.thegraph.com/subgraphs/name/stevennevins/royaltyloyalty',
+        cache: new InMemoryCache()
+    });
+
     return useQuery({
-        queryKey: ['royalties', tokenAddress],
+        queryKey: ['royalties', royaltyEvents],
         queryFn: async () => {
-            const contract = Erc21Factory.connect(tokenAddress, provider);
-            const filter = contract.filters.RoyaltyPayment();
-            const events = await contract.queryFilter(filter);
-
             let totalPaid = '0';
-            const royaltyPayments = events.map((event) => {
-                totalPaid = BigNumber.from(event.args.amount)
+
+            const { data } = await client.query({
+                query: royaltyEvents,
+            });
+
+            const royaltyPayments = data.royaltyEvents.map((event) => {
+                totalPaid = BigNumber.from(event.royaltyAmount)
                     .add(totalPaid)
                     .toString();
                 return {
-                    operator: event.args.operator,
-                    payer: event.args.payer,
-                    currency: event.args.currency,
-                    amount: event.args.amount.toString(),
-                    tokenId: event.args.id.toString(),
-                    transactionHash: event.transactionHash,
-                    blockNumber: event.blockNumber,
+                    ...event,
+                    amount: event.royaltyAmount,
+                    currency: event.royaltyCurrency,
+                    transactionHash: event.id
                 };
             });
 
-            return {
-                totalPaid,
-                royaltyPayments,
-            };
+            return { totalPaid, royaltyPayments, };
         },
     });
 }

@@ -13,11 +13,11 @@ import useTransfers from 'hooks/useTransfers';
 import useTransfersWithRoyalties from 'hooks/useTransfersWithRoyalties';
 import type { GetServerSideProps, NextPage } from 'next';
 import {
-    useContext,
-    useCallback,
-    useState,
     Dispatch,
     SetStateAction,
+    useCallback,
+    useContext,
+    useState,
 } from 'react';
 import infuraClient from 'services/infuraClient';
 import { Asset, Collection } from 'types/infuraTypes';
@@ -42,7 +42,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     const { data: tokens } = useTokens(collection.contract);
     const { data: ownersData } = useOwners(collection.contract);
     const { data: transfers } = useTransfers(collection.contract);
-    const { data: royaltyData } = useRoyalties(collection.contract);
+    const { data: royaltyData } = useRoyalties();
     const { data: royalty } = useCollectionRoyalty(collection.contract);
 
     const { owners, ownerByTokenId } = ownersData || {};
@@ -113,7 +113,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         setIsWhitelistModalOpen={setIsWhitelistModalOpen}
                         setMerkleRoot={setMerkleRoot}
                     />
-                    {profile?.profileId && (
+                    {profile?.profileId && selectedOwners.length > 1 && (
                         <button onClick={() => setIsPostModalOpen(true)}>
                             Post
                         </button>
@@ -130,7 +130,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                     {tabToComponent[activeTab]}
                 </div>
             </div>
-            {profile?.profileId && (
+            {profile?.profileId && selectedOwners.length > 1 && (
                 <PostModal
                     isOpen={isPostModalOpen}
                     setIsOpen={setIsPostModalOpen}
