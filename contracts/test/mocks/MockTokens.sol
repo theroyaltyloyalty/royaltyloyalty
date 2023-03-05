@@ -11,9 +11,6 @@ import {SVGUtil} from '../../src/tokens/utils/SVGUtil.sol';
 contract MockERC20 is ERC20('', '', 18) {}
 
 contract MockERC721 is ERC721('RLTY', 'LTY'), SVGUtil {
-    using Strings for uint256;
-    string public baseURI;
-
     function tokenURI(uint256 id) public pure override returns (string memory) {
         return _uri(id, keccak256(abi.encodePacked(id)), 'R', 'L');
     }
