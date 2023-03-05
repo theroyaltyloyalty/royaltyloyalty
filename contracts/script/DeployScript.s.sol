@@ -28,7 +28,7 @@ contract DeployScript is Script {
 
         uint256 value;
         for (uint256 i; i < 20; i++) {
-            value = i % 2 == 0 ? 0.05 ether : 0;
+            value = i % 2 == 0 ? 0.05 gwei : 0;
             router.mockRoyaltyPayment{value: value}(
                 address(token),
                 i,
