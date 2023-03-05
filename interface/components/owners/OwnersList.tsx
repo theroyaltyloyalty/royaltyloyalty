@@ -28,9 +28,15 @@ export default function OwnersList({
 }): JSX.Element {
     const { profile } = useContext(MainContext);
     const showFollowing = useMemo(() => Boolean(profile.profileId), [profile]);
-    const [selectionState, setSelectionState] = useState<SelectionState>(
-        SelectionState.NONE
-    );
+    const [selectionState, setSelectionState] = useState<SelectionState>(() => {
+        if (selectedOwners.length === 0) {
+            return SelectionState.NONE;
+        } else if (selectedOwners.length === owners.length) {
+            return SelectionState.ALL;
+        } else {
+            return SelectionState.SOME;
+        }
+    });
 
     const handleHeaderCheckboxChange = useCallback(() => {
         if (selectionState === SelectionState.NONE) {
