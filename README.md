@@ -1,11 +1,11 @@
 # Royalty Loyalty
 
 Royalty Loyalty is our submission for the 2023 ETH Denver BUIDLathon. The project includes:
-Several implementations of our proposal for a new royalty interface
-An NFT exchange that implements our proposed interface
-Deployments of the above through a CREATE3 Factory on 5 different EVM test networks
-A Graph subgraph that can index the events of the interface
-A web app that leverages all of the above to aggregate data about royalty payments.
+- Several implementations of our proposal for a new royalty interface
+- An NFT exchange that implements our proposed interface
+- Deployments of the above through a CREATE3 Factory on 5 different EVM test networks
+- A Graph subgraph that can index the events of the interface
+- A web app that leverages all of the above to aggregate data about royalty payments.
 
 Whether or not marketplaces respect royalty payments is a hot topic in the current NFT market. The problem we see in this debate is not related to enforcement but rather that there is no easy way for a creator to see when and where royalties are respected. To confront this problem we propose an extension to EIP-2981 that includes a standardized royalty payment event and a payment hook on the token contract that emits this event. 
 
