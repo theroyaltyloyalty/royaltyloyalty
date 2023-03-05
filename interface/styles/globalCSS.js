@@ -70,6 +70,13 @@ export const globalCSS = {
                 background: 'transparent',
                 fontWeight: 'bold',
             },
+            textarea: {
+                border: 'none !important',
+                overflow: 'auto !important',
+                outline: 'none !important',
+                boxShadow: 'none !important',
+                resize: 'none !important',
+            },
             '.chakra-alert > button': {
                 border: '1px solid white',
             },
