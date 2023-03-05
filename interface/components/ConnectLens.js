@@ -49,7 +49,7 @@ export function ConnectLens() {
                     const { items } = res.data.profiles;
                     if (items.length > 0) {
                         const { handle, id } = items[0];
-                        const { url } = items[0].picture.original;
+                        const { url } = items[0]?.picture?.original;
                         const ipfs = url.replace('ipfs://', '');
                         client.query({
                             query: challenge,
