@@ -15,7 +15,7 @@ import { Asset, Collection } from 'types/infuraTypes';
 import { OwnerData, Royalty, RoyaltyData } from 'types/types';
 import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
-import { Social } from '../../components';
+import { CreatePublication } from '../../components';
 import { MainContext } from '../../contexts/MainContext';
 
 export enum PageTab {
@@ -68,6 +68,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                     <h1 className="font-bold text-4xl">{collection.name}</h1>
                     <p>{shortenAddress(collection.contract)}</p>
                 </div>
+                {profileId && <CreatePublication/>}
                 <Stats
                     owners={owners}
                     tokens={tokens}
