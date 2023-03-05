@@ -166,7 +166,7 @@ const Tabs = ({
     ];
 
     return (
-        <div className="flex items-center space-x-4 mb-4">
+        <div className="flex items-center space-x-4 mb-5">
             {tabs.map((tab) => (
                 <div
                     key={tab.value}
@@ -218,7 +218,9 @@ const Stats = ({
         <div className="flex items-center space-x-10">
             {generalStats.map((stat) => (
                 <div key={stat.label}>
-                    <p className="text-xs uppercase">{stat.label}</p>
+                    <p className="text-xs uppercase font-bold text-gray-200">
+                        {stat.label}
+                    </p>
                     <p className="font-bold text-2xl">{stat.value}</p>
                 </div>
             ))}
@@ -262,18 +264,20 @@ const Actions = ({
     }, [collection.name, selectedOwners]);
 
     return (
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 text-sm font-bold">
             <button
+                className="py-2"
                 onClick={handleMerkleTreeClick}
                 disabled={!selectedOwners?.length}
             >
                 Create whitelist
             </button>
             <button
+                className="py-2"
                 disabled={!selectedOwners?.length}
                 onClick={handleDownloadOwners}
             >
-                Download owners
+                Download collectors
             </button>
         </div>
     );
