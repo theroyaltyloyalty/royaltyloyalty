@@ -1,4 +1,5 @@
 import { isAddress } from '@ethersproject/address';
+import PostModal from 'components/modals/PostModal';
 import WhitelistModal from 'components/modals/WhitelistModal';
 import OwnersList from 'components/owners/OwnersList';
 import TokensList from 'components/tokens/TokensList';
@@ -24,7 +25,6 @@ import { OwnerData, OwnerExtended, Royalty, RoyaltyData } from 'types/types';
 import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
 import { generateMerkleTree } from 'utils/merkleTree';
-import { CreatePublication } from '../../components';
 import { MainContext } from '../../contexts/MainContext';
 
 export enum PageTab {
@@ -61,6 +61,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     const [activeTab, setActiveTab] = useState(PageTab.Owners);
     const [selectedOwners, setSelectedOwners] = useState<OwnerExtended[]>([]);
     const [isWhitelistModalOpen, setIsWhitelistModalOpen] = useState(false);
+    const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
     // EFFECTS
     // Reset selected owners when tab changes
@@ -99,7 +100,9 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         owners={owners}
                         setIsWhitelistModalOpen={setIsWhitelistModalOpen}
                     />
-                    {profile?.profileId && <CreatePublication selectedOwners={selectedOwners} />}
+                    {profile?.profileId && <button onClick={() => setIsPostModalOpen(true)}>
+                        Post
+                    </button>}
                 </div>
                 <Stats
                     owners={owners}
@@ -112,6 +115,11 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                     {tabToComponent[activeTab]}
                 </div>
             </div>
+            {profile?.profileId && <PostModal
+                isOpen={isPostModalOpen}
+                setIsOpen={setIsPostModalOpen}
+                selectedOwners={selectedOwners}
+            />}
             <WhitelistModal
                 isOpen={isWhitelistModalOpen}
                 setIsOpen={setIsWhitelistModalOpen}
