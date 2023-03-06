@@ -50,3 +50,8 @@ export interface OwnerExtended extends OwnerData, RoyaltyStats {
     loyaltyLevel: LoyaltyLevel;
     isFollower: boolean;
 }
+
+export interface MerkleTreeData {
+    root: string;
+    input: string[];
+}

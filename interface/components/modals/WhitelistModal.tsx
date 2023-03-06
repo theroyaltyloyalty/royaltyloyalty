@@ -1,29 +1,29 @@
 import Modal from '../Modal';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { OwnerExtended } from 'types/types';
+import { MerkleTreeData } from 'types/types';
 import { RiFileCopyLine as IconCopy } from 'react-icons/ri';
 import Copy from 'components/Copy';
 
 export default function WhitelistModal({
     isOpen,
     setIsOpen,
-    selectedOwners,
-    merkleRoot,
+    merkleTreeData,
 }: {
     isOpen: boolean;
     setIsOpen: Dispatch<SetStateAction<boolean>>;
-    selectedOwners: OwnerExtended[];
-    merkleRoot: string;
+    merkleTreeData: MerkleTreeData;
 }) {
     return (
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
             <div className="space-y-6">
-                <h2 className="font-bold text-2xl">Create whitelist</h2>
+                <h2 className="font-bold text-2xl">
+                    Here&apos;s your whitelist information
+                </h2>
 
-                <ResultArea title="Merkle root" value={merkleRoot} />
+                <ResultArea title="Merkle root" value={merkleTreeData?.root} />
                 <ResultArea
                     title="Addresses"
-                    value={selectedOwners.map((owner) => owner.address)}
+                    value={merkleTreeData?.input.map((str) => str)}
                 />
             </div>
         </Modal>
