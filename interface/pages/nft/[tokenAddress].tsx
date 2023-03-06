@@ -22,7 +22,13 @@ import {
 import Head from 'next/head';
 import infuraClient from 'services/infuraClient';
 import { Asset, Collection } from 'types/infuraTypes';
-import { OwnerData, OwnerExtended, Royalty, RoyaltyData } from 'types/types';
+import {
+    OwnerData,
+    OwnerExtended,
+    Royalty,
+    RoyaltyData,
+    MerkleTreeData,
+} from 'types/types';
 import { shortenAddress } from 'utils/address';
 import { convertToEth } from 'utils/currency';
 import { generateMerkleTree } from 'utils/merkleTree';
@@ -65,7 +71,9 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
     const [isWhitelistModalOpen, setIsWhitelistModalOpen] = useState(false);
     const [selectedOwners, setSelectedOwners] = useState<OwnerExtended[]>([]);
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-    const [merkleRoot, setMerkleRoot] = useState<string | null>(null);
+    const [merkleTreeData, setMerkleTreeData] = useState<MerkleTreeData | null>(
+        null
+    );
 
     // TABS
     const tabToComponent: {
@@ -117,9 +125,10 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         </div>
                         <Actions
                             collection={collection}
+                            owners={ownersExtended}
                             selectedOwners={selectedOwners}
                             setIsWhitelistModalOpen={setIsWhitelistModalOpen}
-                            setMerkleRoot={setMerkleRoot}
+                            setMerkleTreeData={setMerkleTreeData}
                             profile={profile}
                             setIsPostModalOpen={setIsPostModalOpen}
                         />
@@ -148,8 +157,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                 <WhitelistModal
                     isOpen={isWhitelistModalOpen}
                     setIsOpen={setIsWhitelistModalOpen}
-                    selectedOwners={selectedOwners}
-                    merkleRoot={merkleRoot}
+                    merkleTreeData={merkleTreeData}
                 />
             </div>
         </>
@@ -239,15 +247,17 @@ const Stats = ({
 
 const Actions = ({
     collection,
+    owners,
     selectedOwners,
-    setMerkleRoot,
+    setMerkleTreeData,
     setIsWhitelistModalOpen,
-    profile,
     setIsPostModalOpen,
+    profile,
 }: {
     collection: Collection;
+    owners: OwnerExtended[];
     selectedOwners: OwnerExtended[];
-    setMerkleRoot: Dispatch<SetStateAction<string | null>>;
+    setMerkleTreeData: Dispatch<SetStateAction<MerkleTreeData | null>>;
     setIsWhitelistModalOpen: Dispatch<SetStateAction<boolean>>;
     profile: {
         accessToken: any;
@@ -258,41 +268,39 @@ const Actions = ({
     setIsPostModalOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
     const handleMerkleTreeClick = useCallback(() => {
-        if (!selectedOwners?.length) {
-            return;
-        }
-        const addresses = selectedOwners.map((owner) => owner.address);
+        const ownersToUse = selectedOwners.length ? selectedOwners : owners;
+        const addresses = ownersToUse.map((owner) => owner.address);
         const merkleTree = generateMerkleTree(addresses);
-        setMerkleRoot(merkleTree.root);
+        setMerkleTreeData({
+            root: merkleTree.root,
+            input: addresses,
+        });
         setIsWhitelistModalOpen(true);
-    }, [selectedOwners, setIsWhitelistModalOpen, setMerkleRoot]);
+    }, [owners, selectedOwners, setIsWhitelistModalOpen, setMerkleTreeData]);
 
     const handleDownloadOwners = useCallback(() => {
-        if (!selectedOwners?.length) {
-            return;
-        }
-
-        const ownersInput = selectedOwners.map((owner) => {
+        const ownersToUse = selectedOwners.length ? selectedOwners : owners;
+        const ownersInput = ownersToUse.map((owner) => {
             const newOwner = { ...owner };
             delete newOwner.tokens;
             return newOwner;
         });
 
         downloadCSV(ownersInput, `collectors-${collection.name}`);
-    }, [collection.name, selectedOwners]);
+    }, [collection.name, owners, selectedOwners]);
 
     return (
         <div className="flex items-center space-x-4 text-sm font-bold">
             <button
                 className="py-2 rounded-lg"
                 onClick={handleMerkleTreeClick}
-                disabled={!selectedOwners?.length}
+                disabled={!owners?.length}
             >
                 Create whitelist
             </button>
             <button
                 className="py-2 rounded-lg"
-                disabled={!selectedOwners?.length}
+                disabled={!owners?.length}
                 onClick={handleDownloadOwners}
             >
                 Download collectors
