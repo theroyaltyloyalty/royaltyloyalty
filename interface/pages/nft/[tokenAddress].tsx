@@ -17,7 +17,9 @@ import {
     SetStateAction,
     useCallback,
     useContext,
+    useMemo,
     useState,
+    useEffect,
 } from 'react';
 import Head from 'next/head';
 import infuraClient from 'services/infuraClient';
@@ -35,6 +37,9 @@ import { generateMerkleTree } from 'utils/merkleTree';
 import { MainContext } from '../../contexts/MainContext';
 import { downloadCSV } from 'utils/csv';
 import Avatar from 'components/Avatar';
+import Filter from 'components/Filter';
+import { loyaltyOptions } from 'utils/loyalty';
+import { LoyaltyLevel } from 'types/types';
 
 export enum PageTab {
     Owners = 'Owners',
@@ -57,6 +62,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
         transfers,
         royaltyData
     );
+
     const { ownersToTransfers, tokensToTransfers } =
         useTransferMappings(transfersWithRoyalty);
 
@@ -75,13 +81,38 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
         null
     );
 
+    const [loyaltyFilter, setLoyaltyFilter] = useState<LoyaltyLevel[]>([]);
+    const filteredOwners = useMemo(() => {
+        if (!loyaltyFilter.length) {
+            return ownersExtended;
+        }
+
+        return ownersExtended.filter((owner) =>
+            loyaltyFilter.includes(owner.loyaltyLevel)
+        );
+    }, [loyaltyFilter, ownersExtended]);
+
+    // EFFECTS
+    // Remove selected owners that are no longer in the filtered list
+    useEffect(() => {
+        if (!loyaltyFilter.length) {
+            return;
+        }
+
+        setSelectedOwners((prevSelectedOwners) =>
+            prevSelectedOwners.filter((owner) =>
+                loyaltyFilter.includes(owner.loyaltyLevel)
+            )
+        );
+    }, [loyaltyFilter]);
+
     // TABS
     const tabToComponent: {
         [key in PageTab]: JSX.Element;
     } = {
         [PageTab.Owners]: (
             <OwnersList
-                owners={ownersExtended}
+                owners={filteredOwners}
                 selectedOwners={selectedOwners}
                 setSelectedOwners={setSelectedOwners}
             />
@@ -125,7 +156,7 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         </div>
                         <Actions
                             collection={collection}
-                            owners={ownersExtended}
+                            owners={filteredOwners}
                             selectedOwners={selectedOwners}
                             setIsWhitelistModalOpen={setIsWhitelistModalOpen}
                             setMerkleTreeData={setMerkleTreeData}
@@ -140,11 +171,18 @@ const NftPage: NextPage = ({ collection }: { collection: Collection }) => {
                         royaltyData={royaltyData}
                     />
                     <div>
-                        <Tabs
-                            activeTab={activeTab}
-                            setActiveTab={setActiveTab}
-                        />
-                        {tabToComponent[activeTab]}
+                        <div className="mb-2 flex items-center justify-between">
+                            <Tabs
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
+                            <FilterActions
+                                activeTab={activeTab}
+                                loyaltyFilter={loyaltyFilter}
+                                setLoyaltyFilter={setLoyaltyFilter}
+                            />
+                        </div>
+                        <div>{tabToComponent[activeTab]}</div>
                     </div>
                 </div>
                 {profile?.profileId && selectedOwners.length > 1 && (
@@ -183,11 +221,11 @@ const Tabs = ({
     ];
 
     return (
-        <div className="flex items-center space-x-4 mb-5">
+        <div className="flex items-center space-x-4">
             {tabs.map((tab) => (
                 <div
                     key={tab.value}
-                    className={`cursor-pointer rounded-md border text-sm font-bold  px-3 py-2 ${
+                    className={`cursor-pointer rounded-md border text-sm font-bold px-3 py-2 ${
                         activeTab === tab.value
                             ? 'text-black border-white bg-white'
                             : 'text-white border-gray-600'
@@ -315,6 +353,32 @@ const Actions = ({
             )}
         </div>
     );
+};
+
+const FilterActions = ({
+    activeTab,
+    setLoyaltyFilter,
+    loyaltyFilter,
+}: {
+    activeTab: PageTab;
+    loyaltyFilter: LoyaltyLevel[];
+    setLoyaltyFilter: Dispatch<SetStateAction<LoyaltyLevel[]>>;
+}) => {
+    if (activeTab === PageTab.Owners) {
+        return (
+            <Filter
+                label="Loyalty"
+                selected={loyaltyFilter}
+                onChange={(newSelected) => setLoyaltyFilter(newSelected)}
+                options={loyaltyOptions.map((o) => ({
+                    label: `${o.emoji} ${o.label}`,
+                    value: o.level,
+                }))}
+            />
+        );
+    } else {
+        return <></>;
+    }
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {

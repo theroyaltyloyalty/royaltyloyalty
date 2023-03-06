@@ -5,7 +5,6 @@ import {
     useMemo,
     Dispatch,
     SetStateAction,
-    useState,
     useCallback,
 } from 'react';
 import { MainContext } from '../../contexts/MainContext';
@@ -28,7 +27,7 @@ export default function OwnersList({
 }): JSX.Element {
     const { profile } = useContext(MainContext);
     const showFollowing = useMemo(() => Boolean(profile.profileId), [profile]);
-    const [selectionState, setSelectionState] = useState<SelectionState>(() => {
+    const selectionState = useMemo(() => {
         if (selectedOwners.length === 0) {
             return SelectionState.NONE;
         } else if (selectedOwners.length === owners.length) {
@@ -36,15 +35,13 @@ export default function OwnersList({
         } else {
             return SelectionState.SOME;
         }
-    });
+    }, [selectedOwners.length, owners.length]);
 
     const handleHeaderCheckboxChange = useCallback(() => {
         if (selectionState === SelectionState.NONE) {
             setSelectedOwners(owners);
-            setSelectionState(SelectionState.ALL);
         } else {
             setSelectedOwners([]);
-            setSelectionState(SelectionState.NONE);
         }
     }, [owners, selectionState, setSelectedOwners]);
 
@@ -53,26 +50,16 @@ export default function OwnersList({
             const isSelected = selectedOwners.find(
                 (o) => o.address === owner.address
             );
-            let newLength = selectedOwners.length;
+
             if (isSelected) {
                 setSelectedOwners(
                     selectedOwners.filter((o) => o.address !== owner.address)
                 );
-                newLength--;
             } else {
                 setSelectedOwners([...selectedOwners, owner]);
-                newLength++;
-            }
-
-            if (newLength === 0) {
-                setSelectionState(SelectionState.NONE);
-            } else if (newLength === owners.length) {
-                setSelectionState(SelectionState.ALL);
-            } else {
-                setSelectionState(SelectionState.SOME);
             }
         },
-        [owners.length, selectedOwners, setSelectedOwners]
+        [selectedOwners, setSelectedOwners]
     );
 
     return (

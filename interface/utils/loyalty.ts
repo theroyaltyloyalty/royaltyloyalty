@@ -1,6 +1,6 @@
 import { LoyaltyLevel } from 'types/types';
 
-const loyaltyData: {
+export const loyaltyOptions: {
     level: LoyaltyLevel;
     label: string;
     emoji: string;
@@ -52,7 +52,7 @@ const loyaltyData: {
 ];
 
 export const getLoyalty = (percentage: number) => {
-    const loyalty = loyaltyData.find(
+    const loyalty = loyaltyOptions.find(
         (loyalty) =>
             percentage >= loyalty.minPercentage &&
             percentage <= loyalty.maxPercentage
