@@ -53,18 +53,23 @@ export default function OwnersList({
             const isSelected = selectedOwners.find(
                 (o) => o.address === owner.address
             );
+            let newLength = selectedOwners.length;
             if (isSelected) {
                 setSelectedOwners(
                     selectedOwners.filter((o) => o.address !== owner.address)
                 );
-                setSelectionState(SelectionState.SOME);
+                newLength--;
             } else {
                 setSelectedOwners([...selectedOwners, owner]);
-                if (selectedOwners.length + 1 === owners.length) {
-                    setSelectionState(SelectionState.ALL);
-                } else {
-                    setSelectionState(SelectionState.SOME);
-                }
+                newLength++;
+            }
+
+            if (newLength === 0) {
+                setSelectionState(SelectionState.NONE);
+            } else if (newLength === owners.length) {
+                setSelectionState(SelectionState.ALL);
+            } else {
+                setSelectionState(SelectionState.SOME);
             }
         },
         [owners.length, selectedOwners, setSelectedOwners]
